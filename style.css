@@ -3,21 +3,61 @@
 }
 
 body{
-    background-image: url("background.jpeg");
+    background-image: url("images/background.jpeg");
     background-size: cover;
-
+    padding: 0;
 }
 
-div{
-    /* background-color:rgba(255, 0, 255, 100); */
-    width: fit-content;
+#menu{
+    position: absolute;
     height: fit-content;
-    margin: auto;
+    width: fit-content;
+    margin: 0;
+    top: 45%;
+    left: 50%;
+    -ms-transform: translateY(-50%) translateX(-50%);
+    transform: translateY(-50%) translateX(-50%);
+}
+.corner{
+    position: absolute;
+    margin: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
 }
 
+.top-left{
+    top:0;
+    left:0;
+    border-width: 200px 200px 0 0;
+    border-color: #000 transparent transparent transparent;
+}
+.bottom-right{
+    bottom:0;
+    right:0;
+    border-width: 200px 200px 0 0;
+    border-color: transparent #000 transparent transparent;
+}
+.top-right{
+    top:0;
+    right:0;
+    border-width: 0 200px 200px 0;
+    border-color:transparent #000 transparent transparent;
+}
+.bottom-left{
+    bottom:0;
+    left:0;
+    border-width: 200px 0 0 200px;
+    border-color: transparent transparent transparent #000;
+}
 #pc{
   width: 350px;
   height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 button{
