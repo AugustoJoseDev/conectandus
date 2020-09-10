@@ -1,13 +1,24 @@
 *{
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    user-select: none;
 }
 
 body{
-    background-image: url("images/background.jpeg");
-    background-size: cover;
     padding: 0;
 }
-
+#bg {
+    background-image: url("images/background.jpeg");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
 #menu{
     position: absolute;
     height: fit-content;
@@ -29,25 +40,25 @@ body{
 .top-left{
     top:0;
     left:0;
-    border-width: 200px 200px 0 0;
+    border-width: 15vw 15vw 0 0;
     border-color: #000 transparent transparent transparent;
 }
 .bottom-right{
     bottom:0;
     right:0;
-    border-width: 200px 200px 0 0;
+    border-width: 15vw 15vw 0 0;
     border-color: transparent #000 transparent transparent;
 }
 .top-right{
     top:0;
     right:0;
-    border-width: 0 200px 200px 0;
+    border-width: 0 15vw 15vw 0;
     border-color:transparent #000 transparent transparent;
 }
 .bottom-left{
     bottom:0;
     left:0;
-    border-width: 200px 0 0 200px;
+    border-width: 15vw 0 0 15vw;
     border-color: transparent transparent transparent #000;
 }
 #pc{
@@ -60,7 +71,8 @@ body{
   margin-bottom: auto;
 }
 
-button{
+#menu button{
+    display:block;
     width: 200px;
     height: 40px;
     background-color: black;
@@ -69,6 +81,5 @@ button{
     font-size: 18pt;
     border: none;
     outline: none;
-
     margin: auto;
 }

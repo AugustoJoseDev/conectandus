@@ -7,48 +7,22 @@
         <title>Home | Conectandus</title>
 
         <link rel="stylesheet" href="style.css">
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     </head>
 
     <body>
+        <div id="bg"></div>
+
         <div class="top-left corner"></div>
         <div class="top-right corner"></div>
         <div class="bottom-left corner"></div>
         <div class="bottom-right corner"></div>
 
-        <div id="mySidebar">
-            <button class="bar-item" onclick="w3_close()">Close &times;</button>
-            <a href="#" class="bar-item">Link 1</a>
-            <a href="#" class="bar-item">Link 2</a>
-            <a href="#" class="bar-item">Link 3</a>
+        <div id="menu">
+            <button id="button">DOAR</button> <br>
+            <img id="pc" src="images/pc-icon.png" alt="icone pc"><br>
+            <button id="button">RECEBER</button>
         </div>
-
-        <div id="main">
-
-            <div class="w3-teal">
-                <button id="openNav" class="w3-button w3-teal w3-xlarge" onclick="w3_open()">&#9776;</button>
-            </div>
-
-            <div id="menu">
-                <button id="button">DOAR</button> <br>
-                <img id="pc" src="images/pc-icon.png" alt="icone pc"><br>
-                <button id="button">RECEBER</button>
-            </div>
-        </div>
-
-        <script>
-            function w3_open() {
-                document.getElementById("main").style.marginLeft = "25%";
-                document.getElementById("mySidebar").style.width = "25%";
-                document.getElementById("mySidebar").style.display = "block";
-                document.getElementById("openNav").style.display = 'none';
-            }
-
-            function w3_close() {
-                document.getElementById("main").style.marginLeft = "0%";
-                document.getElementById("mySidebar").style.display = "none";
-                document.getElementById("openNav").style.display = "inline-block";
-            }
-        </script>
 
     </body>
 
