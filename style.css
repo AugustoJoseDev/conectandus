@@ -1,85 +1,61 @@
-*{
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    user-select: none;
+body {
+    margin: 0;
 }
 
-body{
-    padding: 0;
-}
-#bg {
+.background {
     background-image: url("images/background.jpeg");
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
+    position: fixed;
     height: 100%;
+    width: 100%;
+    z-index: -1;
+    top: 0;
     left: 0;
     margin: 0;
     padding: 0;
-    position: fixed;
-    top: 0;
-    width: 100%;
-}
-#menu{
-    position: absolute;
-    height: fit-content;
-    width: fit-content;
-    margin: 0;
-    top: 45%;
-    left: 50%;
-    -ms-transform: translateY(-50%) translateX(-50%);
-    transform: translateY(-50%) translateX(-50%);
-}
-.corner{
-    position: absolute;
-    margin: 0;
-    width: 0;
-    height: 0;
-    border-style: solid;
 }
 
-.top-left{
-    top:0;
-    left:0;
-    border-width: 15vw 15vw 0 0;
-    border-color: #000 transparent transparent transparent;
-}
-.bottom-right{
-    bottom:0;
-    right:0;
-    border-width: 15vw 15vw 0 0;
-    border-color: transparent #000 transparent transparent;
-}
-.top-right{
-    top:0;
-    right:0;
-    border-width: 0 15vw 15vw 0;
-    border-color:transparent #000 transparent transparent;
-}
-.bottom-left{
-    bottom:0;
-    left:0;
-    border-width: 15vw 0 0 15vw;
-    border-color: transparent transparent transparent #000;
-}
-#pc{
-  width: 350px;
-  height: auto;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: auto;
-  margin-bottom: auto;
+.hcenter {
+    transform: translateX(-50%);
+    margin-left: 50%;
 }
 
-#menu button{
-    display:block;
-    width: 200px;
-    height: 40px;
-    background-color: black;
-    border-radius: 20px;
-    color: white;
-    font-size: 18pt;
+.round-button {
+    width: 300px;
+    height: 60px;
+    border-radius: 30px;
     border: none;
     outline: none;
-    margin: auto;
+    background-color: #111;
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+    transform: translateX(-50%);
+    margin: 25px 50% 25px;
+    transition: all 0.1s;
+}
+.round-button:hover {
+    width: 350px;
+    height: 70px;
+    border-radius: 35px;
+    font-size: 28px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    transition: all 0.1s;
+}
+
+.center-block {
+    /* background-color: #ff000030; */
+    width: 400px;
+    transform: translateX(-50%) translateY(-50%);
+    margin-left: 50vw;
+    margin-top: 40vh;
+    margin-bottom: 0;
+    margin-right: 0;
+}
+
+.center-block img {
+    width: 100%;
 }
