@@ -2,6 +2,11 @@ body {
     margin: 0;
 }
 
+* {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    user-select: none;
+}
+
 .background {
     background-image: url("images/background.jpeg");
     background-position: center center;
@@ -47,7 +52,6 @@ body {
 }
 
 .center-block {
-    /* background-color: #ff000030; */
     width: 400px;
     transform: translateX(-50%) translateY(-50%);
     margin-left: 50vw;
@@ -58,4 +62,36 @@ body {
 
 .center-block img {
     width: 100%;
+}
+
+.corner {
+    position: fixed;
+    margin: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+}
+.top-left {
+    top: 0;
+    left: 0;
+    border-width: 15vw 15vw 0 0;
+    border-color: #111 transparent transparent transparent;
+}
+.bottom-right {
+    bottom: 0;
+    right: 0;
+    border-width: 15vw 15vw 0 0;
+    border-color: transparent #111 transparent transparent;
+}
+.top-right {
+    top: 0;
+    right: 0;
+    border-width: 0 15vw 15vw 0;
+    border-color: transparent #111 transparent transparent;
+}
+.bottom-left {
+    bottom: 0;
+    left: 0;
+    border-width: 15vw 0 0 15vw;
+    border-color: transparent transparent transparent #111;
 }
