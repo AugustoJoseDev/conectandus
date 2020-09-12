@@ -1,5 +1,7 @@
 body {
     margin: 0;
+    min-width: 100%;
+    min-height: 100%;
 }
 
 * {
@@ -7,6 +9,13 @@ body {
     user-select: none;
 }
 
+.App {
+    display: flex;
+    height: 100%;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+}
 .corner {
     position: fixed;
     margin: 0;
@@ -55,13 +64,18 @@ body {
     box-shadow: inset 0 0 25vw #000000;
 }
 
-.hcenter {
-    transform: translateX(-50%);
-    margin-left: 50%;
+.center-box {
+    width: 350px;
+    height: fit-content;
+    margin: 10% auto auto auto;
+}
+.center-box img {
+    width: 90%;
+    margin: 0 5% 0 5%;
 }
 
 .round-button {
-    display: inline-block;
+    display: block;
     width: 300px;
     height: 60px;
     line-height: 60px;
@@ -74,8 +88,7 @@ body {
     font-size: 24px;
     text-decoration: none;
     cursor: pointer;
-    transform: translateX(-50%);
-    margin: 25px 50% 25px;
+    margin: 25px auto 25px auto;
     transition: all 0.1s;
 }
 .round-button:hover {
@@ -87,17 +100,4 @@ body {
     margin-bottom: 20px;
     margin-top: 20px;
     transition: all 0.1s;
-}
-
-.center-block {
-    width: 400px;
-    transform: translateX(-50%) translateY(-50%);
-    margin-left: 50vw;
-    margin-top: 40vh;
-    margin-bottom: 0;
-    margin-right: 0;
-}
-
-.center-block img {
-    width: 100%;
 }
