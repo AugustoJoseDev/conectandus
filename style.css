@@ -11,10 +11,9 @@ body {
 
 .App {
     display: flex;
-    height: 100%;
-    flex: 1;
+    height: 100vh;
+    margin: 0;
     justify-content: center;
-    align-items: center;
 }
 .corner {
     position: fixed;
@@ -22,29 +21,30 @@ body {
     width: 0;
     height: 0;
     border-style: solid;
+    z-index: -1;
 }
 .top-left {
     top: 0;
     left: 0;
-    border-width: 15vw 15vw 0 0;
+    border-width: 17vw 17vw 0 0;
     border-color: #111 transparent transparent transparent;
 }
 .bottom-right {
     bottom: 0;
     right: 0;
-    border-width: 15vw 15vw 0 0;
+    border-width: 17vw 17vw 0 0;
     border-color: transparent #111 transparent transparent;
 }
 .top-right {
     top: 0;
     right: 0;
-    border-width: 0 15vw 15vw 0;
+    border-width: 0 17vw 17vw 0;
     border-color: transparent #111 transparent transparent;
 }
 .bottom-left {
     bottom: 0;
     left: 0;
-    border-width: 15vw 0 0 15vw;
+    border-width: 17vw 0 0 17vw;
     border-color: transparent transparent transparent #111;
 }
 
@@ -64,14 +64,20 @@ body {
     box-shadow: inset 0 0 25vw #000000;
 }
 
-.center-box {
-    width: 350px;
+.main {
+    position: fixed;
+    width: 60%;
+    top: 20%;
+    display: table-column;
     height: fit-content;
-    margin: 10% auto auto auto;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
 }
-.center-box img {
-    width: 90%;
-    margin: 0 5% 0 5%;
+.main img {
+    display: block;
+    width: 350px;
+    margin: 0 auto;
 }
 
 .round-button {
@@ -84,9 +90,9 @@ body {
     border: none;
     outline: none;
     background-color: #111;
-    color: #fff;
+    color: #fff !important;
     font-size: 24px;
-    text-decoration: none;
+    text-decoration: none !important;
     cursor: pointer;
     margin: 25px auto 25px auto;
     transition: all 0.1s;
@@ -101,10 +107,11 @@ body {
     margin-top: 20px;
     transition: all 0.1s;
 }
-
+/* 
 .sidenav {
+    display: table-column;
     height: 100vh;
-    width: 20vw;
+    width: 100vw;
     background-color: #111;
     position: fixed;
     z-index: 1;
@@ -113,7 +120,6 @@ body {
     overflow-x: hidden;
     padding-top: 20px;
 }
-
 .sidenav a {
     display: block;
     padding: 6px 8px 6px 16px;
@@ -127,12 +133,18 @@ body {
 
 .sidenav a:hover {
     color: #111;
+} */
+
+.navbar {
+    position: fixed;
+    width: 100vw;
+    background-color: #1111115e !important;
+}
+.navbar * {
+    color: #fff !important;
 }
 
-.main {
-    position: fixed;
-    top: 0;
-    left: 20vw;
-    height: 100vh;
-    width: 80vw;
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='white' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+    border-color: #fff !important;
 }
