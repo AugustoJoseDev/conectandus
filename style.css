@@ -16,7 +16,6 @@ body {
 
 .App {
     display: flex;
-    height: 100vh;
     margin: 0;
     justify-content: center;
 }
@@ -70,7 +69,7 @@ body {
 }
 
 .main {
-    position: fixed;
+    position: absolute;
     width: 60%;
     top: 20%;
     display: table-column;
@@ -156,8 +155,9 @@ input[type="text"]{
     margin: 20px 0;
 
 }
-input[type="email"]{
-    min-width: 80%;
+input[type="password"]{
+
+    width: 100%;
     font-size: 1.5em;
     border-radius: 0.75em;
     outline: none;
@@ -166,6 +166,30 @@ input[type="email"]{
     margin: 20px 0;
 
 }
+input[type="email"]{
+    display: block;
+    min-width: 100%;
+    font-size: 1.5em;
+    border-radius: 0.75em;
+    outline: none;
+    border: #000000;
+    padding: 5px 15px;
+    margin: 20px 0;
+}
+input[type="date"]{
+    display: block;
+    font-size: 1.5em;
+    border-radius: 0.75em;
+    outline: none;
+    border: #000000;
+    padding: 5px 15px;
+    margin: 20px 0;
+}
+
+input:disabled{
+    cursor: not-allowed;
+}
+
 textarea{
 
     width: 100%;
