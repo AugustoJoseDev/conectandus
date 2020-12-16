@@ -8,7 +8,7 @@ body {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.titulo{
+.titulo {
     color: white;
     text-align: center;
     margin-bottom: 30px;
@@ -112,7 +112,7 @@ body {
     transition: all 0.1s;
 }
 
-.navbar{
+.navbar {
     position: fixed;
     width: 100vw;
     background-color: #1111115e !important;
@@ -122,19 +122,19 @@ body {
     transition: 0.2s;
 }
 
-.perfil{
+.perfil {
     position: absolute;
     right: 8px;
     top: 8px;
 }
 
-.perfil img{
+.perfil img {
     width: 50px;
     height: 50px;
 }
 
-.navbar a:hover{
-    color: aqua!important;
+.navbar a:hover {
+    color: aqua !important;
     transition: 0.2s;
 }
 
@@ -143,9 +143,7 @@ body {
     border-color: #fff !important;
 }
 
-
-input[type="text"]{
-
+input[type="text"] {
     width: 100%;
     font-size: 1.5em;
     border-radius: 0.75em;
@@ -153,10 +151,8 @@ input[type="text"]{
     border: #000000;
     padding: 5px 15px;
     margin: 20px 0;
-
 }
-input[type="password"]{
-
+input[type="password"] {
     width: 100%;
     font-size: 1.5em;
     border-radius: 0.75em;
@@ -164,9 +160,8 @@ input[type="password"]{
     border: #000000;
     padding: 5px 15px;
     margin: 20px 0;
-
 }
-input[type="email"]{
+input[type="email"] {
     display: block;
     min-width: 100%;
     font-size: 1.5em;
@@ -176,7 +171,7 @@ input[type="email"]{
     padding: 5px 15px;
     margin: 20px 0;
 }
-input[type="date"]{
+input[type="date"] {
     display: block;
     font-size: 1.5em;
     border-radius: 0.75em;
@@ -186,12 +181,11 @@ input[type="date"]{
     margin: 20px 0;
 }
 
-input:disabled{
+input:disabled {
     cursor: not-allowed;
 }
 
-textarea{
-
+textarea {
     width: 100%;
     font-size: 1.5em;
     border-radius: 0.75em;
@@ -199,28 +193,22 @@ textarea{
     border: #000000;
     padding: 15px 25px;
     margin: 20px 0;
-
 }
 
-.label{
+.label {
     display: inline;
     color: white;
     font-size: 1.3em;
     margin: 10px;
 }
-.center{
+.center {
     text-align: center;
 }
 
-label{
+label {
     color: white;
     font-size: 1.5em;
 }
-
-
-
-
-
 
 /* The container */
 .container {
@@ -235,18 +223,18 @@ label{
     -ms-user-select: none;
     user-select: none;
     vertical-align: text-top;
-  }
-  
-  /* Hide the browser's default checkbox */
-  .container input {
+}
+
+/* Hide the browser's default checkbox */
+.container input {
     position: absolute;
     opacity: 0;
     cursor: pointer;
     height: 0;
     width: 0;
-  }
-  /* Create a custom checkbox */
-  .checkmark {
+}
+/* Create a custom checkbox */
+.checkmark {
     position: absolute;
     top: 0;
     left: 0;
@@ -254,32 +242,31 @@ label{
     width: 30px;
     background-color: #eee;
     border-radius: 7px;
-  }
-  
-  /* On mouse-over, add a grey background color */
-  .container:hover input ~ .checkmark {
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
     background-color: #ccc;
-    
-  }
-  
-  /* When the checkbox is checked, add a blue background */
-  .container input:checked ~ .checkmark {
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
     background-color: black;
-  }
-  
-  /* Create the checkmark/indicator (hidden when not checked) */
-  .checkmark:after {
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
     content: "";
     position: absolute;
     display: none;
-  }
-  
-  /* Show the checkmark when checked */
-  .container input:checked ~ .checkmark:after {
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
     display: block;
-  }
-  /* Style the checkmark/indicator */
-  .container .checkmark:after {
+}
+/* Style the checkmark/indicator */
+.container .checkmark:after {
     left: 11px;
     top: 5px;
     width: 8px;
@@ -289,5 +276,50 @@ label{
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
-  }
-  
+}
+
+table {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table td,
+table th {
+    border: 1px solid #ddd !important;
+    padding: 8px;
+    height: 36px;
+}
+
+table tr {
+    background-color: #fff !important;
+}
+
+table tr:nth-child(even) {
+    background-color: #f2f2f2 !important;
+}
+
+table tr:hover {
+    background-color: #ddd !important;
+}
+
+table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #0a43bd !important;
+    color: white !important;
+}
+
+.main-dashboard {
+    position: absolute;
+    width: 90%;
+    top: 10%;
+}
+
+.donation {
+    color: rgb(12, 78, 0);
+}
+.request {
+    color: rgb(204, 145, 19);
+}
