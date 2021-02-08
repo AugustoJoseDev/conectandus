@@ -1,0 +1,16 @@
+{
+  "name": "conectandus",
+  "version": "1.0.1",
+  "main": "src/index.js",
+  "repository": "https://github.com/augustojosedev/conectandus",
+  "contributors": [
+    "Edson Junior <edson.junior4@estudante.ifms.edu.br>",
+    "Jose Augusto Queiroz Comparotto Gomes <jose.augusto.comparotto@gmail.com>"
+  ],
+  "license": "proprietary",
+  "private": true,
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "express": "^4.17.1"
+  }
+}

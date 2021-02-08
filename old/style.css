@@ -1,3 +1,7 @@
+@media only screen and (max-device-width: 900px) {
+    .menu { width:100%; }
+}
+
 body {
     margin: 0;
     min-width: 100%;
@@ -27,6 +31,7 @@ body {
     border-style: solid;
     z-index: -1;
 }
+/* 
 .top-left {
     top: 0;
     left: 0;
@@ -44,14 +49,15 @@ body {
     right: 0;
     border-width: 0 17vw 17vw 0;
     border-color: transparent #111 transparent transparent;
-}
+} 
+
 .bottom-left {
     bottom: 0;
     left: 0;
     border-width: 17vw 0 0 17vw;
     border-color: transparent transparent transparent #111;
 }
-
+*/
 .background {
     background-image: url(/images/background.jpeg);
     background-position: center center;

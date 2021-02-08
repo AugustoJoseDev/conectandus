@@ -1,0 +1,15 @@
+.background {
+    background-image: url(/images/background.jpeg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    box-shadow: inset 0 0 25vw #000000;
+}
