@@ -1,22 +1,24 @@
 const express = require('express')
-const ejs = require('ejs')
-const path = require('path')
+const cors = require('cors')
 
+//criação do app
 const app = express()
 
-app.set('ejs', ejs.renderFile)
-app.set('view engine', 'ejs')
-app.set('views', path.join(__dirname, 'views'))
 
-app.use('/', express.static(path.join(__dirname, '../public')))
+//Habilitando CORS, para usar como API
+app.use(cors())
+
+//Configuração para tratar requisições em JSON
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
+
+require('./database')
+
+//Importando rotas dos controladores
+require('./app/controllers')(app)
 
 
-app.get('/', (req, res) => {
-
-    return res.render('base', { titulo: 'teste' })
-
-})
-
-app.listen(8080, () => {
-    console.log(`Rodando em http://localhost:8080`)
+//Iniciando a aplicação
+app.listen(5000, () => {
+    console.log(`Escutando em http://localhost:5000`)
 })
