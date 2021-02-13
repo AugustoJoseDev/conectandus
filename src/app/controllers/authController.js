@@ -1,21 +1,21 @@
 const express = require('express')
-const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const authConfig = require('../../../config/auth.json')
 const mailer = require('../../services/mailer')
 const crypto = require('crypto')
+const auth = require('../middlewares/auth')
 
 const User = require('../models/User')
 
 const router = express.Router()
 
-function login(id) {
-    return jwt.sign({ id }, authConfig.secret, {
+function login(_id) {
+    return jwt.sign({ _id }, authConfig.secret, {
         expiresIn: 86400 //Um dia em segundos
     })
 }
 
-//Rota para registrar um novo usuario
+//Rota para cadastrar um novo usuario
 //Endpoint: POST /auth/register
 router.post('/register', async (req, res) => {
     try {
@@ -47,7 +47,7 @@ router.post('/register', async (req, res) => {
 
         await user.save()
 
-        user.senha = undefined
+        user.password = undefined
 
         const token = login(user._id)
 
@@ -58,60 +58,52 @@ router.post('/register', async (req, res) => {
     }
 })
 
-router.post('/authenticate', async (req, res) => {
+//Rota para fazer login ou renovar seção e obter um token de acesso
+//Endpoint: POST /auth/authenticate
+router.post('/authenticate',auth, async (req, res) => {
     try {
-        const { email, senha } = req.body
-
-        const user = await User.findOne({ email }).select('+senha')
-
-        if (!user) {
-            return res.status(400).json({ error: 'Usuario não encontrado.' })
-        }
-
-        if (!await bcrypt.compare(senha, user.password)) {
-            return res.status(400).json({ error: 'Senha incorreta!' })
-        }
-
-        user.senha = undefined
+        const { user } = req.auth
 
         const token = login(user._id)
 
         return res.status(200).json({ user, token })
     } catch (err) {
         console.warn(err)
-        return res.status(400).json({ error: 'Unexpected error occurred' })
+        return res.status(400).json({ error: 'Erro inesperado' })
     }
 })
 
+//Rota para solicitar e-mail de recuperação de senha
+//Endpoint: POST /auth/forgot_password
 router.post('/forgot_password', async (req, res) => {
-    const { email } = req.body
-
     try {
+        const { email } = req.body
+
         const user = await User.findOne({ email })
 
         if (!user) {
-            return res.status(400).json({ error: 'User not found' })
+            return res.status(404).json({ error: 'Usuario não encontrado.' })
         }
 
-        const resetPasswordToken = crypto.randomBytes(20).toString('hex')
+        const resetPasswordToken = crypto.randomBytes(16).toString('base64')
+
+        const ticket = jwt.sign({ email, resetPasswordToken }, authConfig.secret, {
+            expiresIn: 3600 //Uma hora em segundos
+        })
 
         const { accepted } = await mailer.sendMail({
-            from: 'no-reply@post.com',
+            from: 'no-reply@conectandus.org.br',
             to: email,
-            subject: 'Forgot password?',
-            html: `<p>Esqueceu a sua senha? Utilize este token para redefini-la: <br/>UserId: ${ user._id } <br/>Token: ${ resetPasswordToken }</p><p>Esse token expira em 1 hora!</p>`
+            subject: 'Esqueceu a senha?',
+            html: `<p>Esqueceu a sua senha? Utilize este ticket para redefini-la: ${ ticket }</p><p>Esse ticket expira em uma hora e só pode ser usado uma vez!</p>`
         })
 
         if (!accepted) {
-            return res.status(500).json({ error: 'Unable to send mail' })
+            return res.status(500).json({ error: 'Não foi possivel enviar E-mail de recuperação de senha.' })
         }
 
-        const now = new Date()
-        const resetPasswordExpires = now.setHours(now.getHours() + 1)
-
         user.set({
-            resetPasswordToken,
-            resetPasswordExpires
+            resetPasswordToken
         })
 
         await user.save()
@@ -119,7 +111,7 @@ router.post('/forgot_password', async (req, res) => {
         return res.sendStatus(200)
     } catch (err) {
         console.warn(err)
-        return res.status(400).json({ error: 'Unexpected error occurred' })
+        return res.status(400).json({ error: 'Erro inesperado' })
     }
 
 })
@@ -127,30 +119,34 @@ router.post('/forgot_password', async (req, res) => {
 router.post('/reset_password', async (req, res) => {
     try {
 
-        const { userId, token: resetPasswordToken, password } = req.body
+        const { ticket, password } = req.body
 
-        if (resetPasswordToken === undefined) {
-            return res.status(400).send({ error: 'No token provided' })
+        if (ticket === undefined) {
+            return res.status(400).send({ error: 'Nenhum ticket foi fornecido.' })
         }
 
-        const user = await User.findById(userId).select('+resetPasswordToken resetPasswordExpires')
+        let decoded 
+        try {
+            decoded = jwt.verify(ticket,authConfig.secret,)
+        } catch (error) {
+            return res.status(400).send({ error: 'O ticket fornecido não é válido.' })
+        }
+
+        const {email, resetPasswordToken } = decoded
+
+        const user = await User.findOne({email}).select('+resetPasswordToken')
 
         if (!user) {
-            return res.status(400).json({ error: 'User not found' })
+            return res.status(404).json({ error: 'Usuario não encontrado.' })
         }
 
         if (resetPasswordToken !== user.resetPasswordToken) {
-            return res.status(400).json({ error: 'Invalid token' })
-        }
-
-        if (new Date() > user.resetPasswordExpires) {
-            return res.status(400).json({ error: 'This token has expired' })
+            return res.status(400).json({ error: 'O ticket fornecido já foi usado.' })
         }
 
         user.set({
             password,
-            resetPasswordToken: undefined,
-            resetPasswordExpires: undefined
+            resetPasswordToken: undefined
         })
 
         await user.save()
@@ -162,7 +158,7 @@ router.post('/reset_password', async (req, res) => {
         return res.status(200).json({ user, token })
     } catch (err) {
         console.warn(err)
-        return res.status(400).json({ error: 'Unexpected error occurred' })
+        return res.status(400).json({ error: 'Erro inesperado' })
     }
 })
 

@@ -1,9 +1,9 @@
-const { Schema, SchemaTypes, model } = require('../../database')
-const bcrypt = require('bcrypt')
+const { Schema,SchemaTypes, model } = require('../../database')
+const bcrypt = require('bcryptjs')
 
 //Definição da extrutura da tabela de usuarios
 const UserSchema = new Schema({
-    nomeCompleto: {
+    fullname: {
         type: String,
         required: true
     },
@@ -11,7 +11,7 @@ const UserSchema = new Schema({
         type: String,
         required: true,
         unique: true,
-        validate: /^[0-9]{11}$/   //Expressão regular para valiadar cpf 11 digitos númericos
+        validate: /^[0-9]{11}$/   //Expressão regular para valiadar cpf com 11 digitos númericos
     },
     email: {
         type: String,
@@ -20,47 +20,43 @@ const UserSchema = new Schema({
         lowercase: true,
         validate: /^.+?@.+?(\..+?)+$/   //Expressão regular simples para valiadar email
     },
-    senha: {
+    password: {
         type: String,
         required: true,
         select: false
     },
-    dataNascimento: {
-        type: Date,
+    birthdate: {
+        type: SchemaTypes.Date,
         require: true
     },
-    telefone: {
+    phone: {
         type: String,
         validate: /^[0-9]{9,13}$/   //Expressão regular para valiadar numeros de telefones de 9 a 13 digitos númericos
     },
-    endereco: {
-        cep: {
+    address: {
+        zipcode: {
             type: String,
             require: true,
             validate: /^[0-9]{8}$/  //Expressão regular para valiadar CEP com 8 digitos númericos
         },
-        rua: {
+        street: {
             type: String,
             require: true,
         },
-        numero: {
+        number: {
             type: String,
             require: true,
         },
-        bairro: {
+        neighborhood: {
             type: String,
             require: true,
         },
-        complemento: {
+        complement: {
             type: String
         }
     },
     resetPasswordToken: {
         type: String,
-        select: false
-    },
-    resetPasswordExpires: {
-        type: Date,
         select: false
     },
     createdAt: {
@@ -73,9 +69,9 @@ const UserSchema = new Schema({
 }, { versionKey: false })
 
 UserSchema.pre('save', async function (next) {
-    if (this.senha) {
+    if (this.password) {
         const hash = await bcrypt.hash(this.password, 10)
-        this.senha = hash
+        this.password = hash
     }
     this.updatedAt = new Date()
     next()

@@ -6,8 +6,16 @@ const User = require('../models/User')
 
 const router = express.Router()
 
+
+// ########## AUTHENTICAÇÃO NECESSÁRIA ##########
+
+router.use(authMiddleware)
+
+// ##############################################
+
+
 //Rota para obter os dados de todos os usuários
-//Endpoint: GET /usres
+//Endpoint: GET /users
 router.get('/', async (req, res) => {
     try {
         const users = await User.find()
@@ -38,26 +46,22 @@ router.get('/:id', async (req, res) => {
     }
 })
 
-// ########## AUTHENTICAÇÃO NECESSÁRIA ##########
-router.use(authMiddleware)
-
-
 //Rota para alterar os dados de um usuario dado um id
 //Endpoint: PUT /users/{id}
 router.put('/:id', async (req, res) => {
     try {
-        const { userId } = req.auth
+        const {auth} = req
         const { id } = req.params
         const data = req.body
 
-        if (id != userId) {
-            return res.status(403).json({ error: 'This user does not have sufficient permission to perform this action' })
+        if (auth.user._id != id) {
+            return res.status(403).json({ error: 'Acesso negado!' })
         }
 
         const user = await User.findById(id)
 
         if (!user) {
-            return res.status(404).json({ error: 'User not found' })
+            return res.status(404).json({ error: 'Usuario não encontrado.' })
         }
 
         delete data._id
@@ -82,23 +86,25 @@ router.put('/:id', async (req, res) => {
         return res.status(200).json({ user })
     } catch (err) {
         console.warn(err)
-        return res.status(400).json({ error: 'Unexpected error occurred' })
+        return res.status(400).json({ error: 'Erro inesperado' })
     }
 })
 
+//Rota para deletar um usuario dado um id
+//Endpoint: DELETE /users/{id}
 router.delete('/:id', async (req, res) => {
     try {
-        const { userId } = req.auth
+        const {auth} = req
         const { id } = req.params
 
-        if (id != userId) {
-            return res.status(403).json({ error: 'This user does not have sufficient permission to perform this action' })
+        if (auth.user._id != id) {
+            return res.status(403).json({ error: 'Acesso negado!' })
         }
 
         const user = await User.findById(id)
 
         if (!user) {
-            return res.status(404).json({ error: 'User not found' })
+            return res.status(404).json({ error: 'Usuario não encontrado.' })
         }
 
         await user.deleteOne()
@@ -106,8 +112,8 @@ router.delete('/:id', async (req, res) => {
         return res.status(200).json({ user })
     } catch (err) {
         console.warn(err)
-        return res.status(400).json({ error: 'Unexpected error occurred' })
+        return res.status(400).json({ error: 'Erro inesperado' })
     }
 })
 
-module.exports = app => app.use('/user', router)
+module.exports = app => app.use('/users', router)
