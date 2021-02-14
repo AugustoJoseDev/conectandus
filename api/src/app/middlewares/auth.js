@@ -33,8 +33,6 @@ module.exports = async (req, res, next) => {
     try{
         const authorization = authorizationHandler(req.headers)
 
-        console.log(authorization);
-
         if(authorization.error){
             const {error} = authorization
             return res.status(401).json({error})

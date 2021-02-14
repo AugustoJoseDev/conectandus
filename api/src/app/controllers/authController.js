@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const authConfig = require('../../../config/auth.json')
 const mailer = require('../../services/mailer')
 const crypto = require('crypto')
-const auth = require('../middlewares/auth')
+const authMiddleware = require('../middlewares/auth')
 
 const User = require('../models/User')
 
@@ -60,7 +60,7 @@ router.post('/register', async (req, res) => {
 
 //Rota para fazer login ou renovar seção e obter um token de acesso
 //Endpoint: POST /auth/authenticate
-router.post('/authenticate',auth, async (req, res) => {
+router.post('/authenticate',authMiddleware, async (req, res) => {
     try {
         const { user } = req.auth
 
@@ -116,6 +116,8 @@ router.post('/forgot_password', async (req, res) => {
 
 })
 
+//Rota para criar uma nova senha após receber o e-mail de recuperação de senha
+//Endpoint: POST /auth/reset_password
 router.post('/reset_password', async (req, res) => {
     try {
 

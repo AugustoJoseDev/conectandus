@@ -1,6 +1,5 @@
 const express = require('express')
 const authMiddleware = require('../middlewares/auth')
-// const Post = require('../models/Post')
 
 const User = require('../models/User')
 
@@ -54,7 +53,7 @@ router.put('/:id', async (req, res) => {
         const { id } = req.params
         const data = req.body
 
-        if (auth.user._id != id) {
+        if ( `${auth.user._id}` !== `${id}`) {
             return res.status(403).json({ error: 'Acesso negado!' })
         }
 
