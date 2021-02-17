@@ -1,21 +1,16 @@
 import React from 'react'
-import AnchorButton from '../../components/Form/AnchorButton'
+import RoundButton from '../../components/Form/RoundButton'
 import { useAuth } from '../../contexts/AuthProvider'
 
 import './style.css'
 
 function Home() {
-    const { signed, signOut } = useAuth()
-
-    function handleSignOut() {
-        signOut()
-    }
 
     return (
-        <div class="menu">
-            <AnchorButton href="#">DOAR</AnchorButton>
+        <div className="menu">
+            <RoundButton href="#">DOAR</RoundButton>
             <img src="/resources/pc-icon.png" alt="icone pc" />
-            <AnchorButton href="#">RECEBER</AnchorButton>
+            <RoundButton href="#">RECEBER</RoundButton>
         </div>
     )
 }

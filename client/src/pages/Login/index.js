@@ -2,11 +2,9 @@ import React from 'react'
 import { Redirect } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthProvider'
 
-import PromptBox from '../../components/Form/PromptBox'
-
 import './style.css'
 
-function Login({ next = "/" }) {
+function Login() {
     const { signed, signIn } = useAuth()
 
     function handleSignIn(e) {
@@ -18,9 +16,13 @@ function Login({ next = "/" }) {
             signIn({ login, password })
 
         } catch (error) {
-            document.querySelector('.prompt-box-wrapper').innerHTML = <PromptBox message={ error } />
         }
     }
+
+    if (signed)
+        return (
+            <Redirect to="/" />
+        )
 
     return (
         <div className="login">
