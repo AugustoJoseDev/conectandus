@@ -1,0 +1,12 @@
+
+.menu {
+    width: 60%;
+    top: 20%;
+    height: fit-content;
+    margin: 7em auto;
+}
+.menu img {
+    display: block;
+    width: 350px;
+    margin: 0 auto;
+}
