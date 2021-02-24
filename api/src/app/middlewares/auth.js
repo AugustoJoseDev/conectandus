@@ -24,7 +24,7 @@ function authorizationHandler({ authorization }) {
         return { format, login, password }
 
     } else {
-        return { error: `Autenticação necessária! Formato de autorização inválido: ${ authorization }` }
+        return { error: `Autenticação necessária!` }
     }
 
 }
@@ -45,12 +45,12 @@ module.exports = async (req, res, next) => {
 
                 jwt.verify(token, authConfig.secret, async (err, { _id }) => {
 
-                    if (err) return res.status(401).json({ error: "Autenticação necessária! O token fornecido é invalido." })
+                    if (err) return res.status(401).json({ error: "Autenticação necessária!" })
 
                     const user = await User.findOne({ _id })
 
                     if (!user) {
-                        return res.status(401).json({ error: "Autenticação necessária! Usuario não encontrado." })
+                        return res.status(401).json({ error: "Usuario não encontrado." })
                     }
 
                     req.auth = { user }
@@ -68,11 +68,11 @@ module.exports = async (req, res, next) => {
                 const user = await User.findOne({ $or: [ { email: login }, { cpf: login } ] }).select('+password')
 
                 if (!user) {
-                    return res.status(401).json({ error: "Autenticação necessária! Usuario não encontrado." })
+                    return res.status(401).json({ error: "Usuario não encontrado." })
                 }
 
                 if (!await bcrypt.compare(password, user.password)) {
-                    return res.status(401).json({ error: 'Autenticação necessária! Senha incorreta.' })
+                    return res.status(401).json({ error: 'Senha incorreta.' })
                 }
 
                 user.password = undefined
