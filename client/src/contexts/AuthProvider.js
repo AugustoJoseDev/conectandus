@@ -2,10 +2,11 @@ import React, { createContext, useContext, useEffect, useState } from 'react'
 import api from '../services/api'
 import * as auth from '../services/auth'
 
-const AuthContext = createContext({ signed: false, user: {}, signIn: ({ login, password }) => { }, signOut: () => { } })
+const AuthContext = createContext({ errored: false, error: "", signed: false, user: {}, signIn: ({ login, password }) => { }, signOut: () => { } })
 
 export default function AuthProvider({ children }) {
     const [ user, setUser ] = useState(null)
+    const [ error, setError ] = useState(null)
 
     useEffect(async () => {
         try {
@@ -15,20 +16,27 @@ export default function AuthProvider({ children }) {
             if (storageToken && storageUser) {
                 api.defaults.headers.Authorization = `Bearer ${ JSON.parse(storageToken) }`
                 setUser(JSON.parse(storageUser))
+                setError(null)
             }
-        } catch (error) {
+        } catch (err) {
             signOut()
         }
 
     }, [])
 
     async function signIn({ login, password }) {
-        const { user, token, status, error } = await auth.signIn({ login, password })
+        const { user, token, error:err } = await auth.signIn({ login, password })
+
+        if(err){
+            setError(err)
+            return
+        }
 
         api.defaults.headers.Authorization = `Bearer ${ token }`
         localStorage.setItem('token', JSON.stringify(token))
         localStorage.setItem('user', JSON.stringify(user))
         setUser(user)
+        setError(null)
     }
 
     function signOut() {
@@ -36,10 +44,11 @@ export default function AuthProvider({ children }) {
         localStorage.removeItem('token')
         localStorage.removeItem('user')
         setUser(null)
+        setError(null)
     }
 
     return (
-        <AuthContext.Provider value={ { signed: !!user, user, signIn, signOut } }>
+        <AuthContext.Provider value={ { errored: !!error, error, signed: !!user, user, signIn, signOut } }>
             {children }
         </AuthContext.Provider>
     )

@@ -5,7 +5,7 @@ import RoundSubmit from './RoundSubmit'
 import './style.css'
 
 function Login() {
-    const { signed, signIn } = useAuth()
+    const { signed,errored,error, signIn } = useAuth()
 
     function handleSignIn(e) {
         try {
@@ -27,6 +27,8 @@ function Login() {
     return (
         <div className="login">
             <p className="singin" align="center">Entrar</p>
+
+            {errored?(<h1>{error}</h1>):undefined}
 
             <div className="prompt-box-wrapper"></div>
 
