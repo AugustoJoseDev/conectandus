@@ -5,6 +5,7 @@ import Background from '../../components/Background'
 import NavBar from '../../components/NavBar/intex'
 
 import './style.css'
+import Footer from '../../components/Footer'
 
 function Common({ children }) {
     const { signed, signOut } = useAuth()
@@ -26,6 +27,8 @@ function Common({ children }) {
             </NavBar>
 
             {children }
+
+            <Footer />
         </>
     )
 }

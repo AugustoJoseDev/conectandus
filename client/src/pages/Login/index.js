@@ -1,7 +1,7 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthProvider'
-
+import RoundSubmit from './RoundSubmit'
 import './style.css'
 
 function Login() {
@@ -31,10 +31,11 @@ function Login() {
             <div className="prompt-box-wrapper"></div>
 
             <form className="form" onSubmit={ handleSignIn }>
-                <input id="login" className="un" type="text" align="center" placeholder="E-Mail ou CPF" required />
-                <input id="password" className="pass" type="password" align="center" placeholder="Senha" required />
-                <input type="submit" align="center" value="Entrar" />
-                <p className="forgot" align="center"><a href="#">Esquecceu a senha?</a></p>
+                <input id="login" className="input" type="text" align="center" placeholder="E-Mail ou CPF" required />
+                <input id="password" className="input" type="password" align="center" placeholder="Senha" required />
+                {/* <input type="submit" align="center" value="Entrar" /> */ }
+                <RoundSubmit value="Entrar" />
+                <p className="forgot" align="center"><a href="#">Esqueceu a senha?</a></p>
             </form>
         </div>
     )

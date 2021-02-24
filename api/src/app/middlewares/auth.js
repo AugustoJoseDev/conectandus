@@ -4,49 +4,49 @@ const authConfig = require('../../../config/auth.json')
 const User = require('../models/User')
 
 
-function authorizationHandler( {authorization} ){
+function authorizationHandler({ authorization }) {
 
     if (!authorization) {
         return { error: "Autenticação necessária!" }
     }
 
-    if(/^Bearer [\w+/-]+\.[\w+/-]+\.[\w+/-]+$/i.test(authorization)){
+    if (/^Bearer [\w+/-]+\.[\w+/-]+\.[\w+/-]+$/i.test(authorization)) {
 
         const [ format, token ] = authorization.split(/ /)
 
-        return {format, token}
+        return { format, token }
 
-    }else if(/^Basic [0-9a-z+/=]+$/i.test(authorization)){
+    } else if (/^Basic [0-9a-z+/=]+$/i.test(authorization)) {
 
         const [ format, base64encoded ] = authorization.split(/ /)
         const [ login, password ] = Buffer.from(base64encoded, 'base64').toString().split(/:/)
 
-        return {format, login, password}
+        return { format, login, password }
 
-    }else{
-        return { error: `Autenticação necessária! Formato de autorização inválido: ${authorization}` }
+    } else {
+        return { error: `Autenticação necessária! Formato de autorização inválido: ${ authorization }` }
     }
 
 }
 
 module.exports = async (req, res, next) => {
-    try{
+    try {
         const authorization = authorizationHandler(req.headers)
 
-        if(authorization.error){
-            const {error} = authorization
-            return res.status(401).json({error})
+        if (authorization.error) {
+            const { error } = authorization
+            return res.status(401).json({ error })
         }
 
-        switch(authorization.format){
+        switch (authorization.format) {
             case 'Bearer':
 
-                const {token} = authorization
+                const { token } = authorization
 
                 jwt.verify(token, authConfig.secret, async (err, { _id }) => {
 
                     if (err) return res.status(401).json({ error: "Autenticação necessária! O token fornecido é invalido." })
-                    
+
                     const user = await User.findOne({ _id })
 
                     if (!user) {
@@ -54,40 +54,40 @@ module.exports = async (req, res, next) => {
                     }
 
                     req.auth = { user }
-            
+
                     next()
-            
+
                 })
 
                 break
 
             case 'Basic':
 
-                    const {login,password} = authorization
+                const { login, password } = authorization
 
-                    const user = await User.findOne({ $or:[ {email:login}, {cpf:login} ] }).select('+password')
+                const user = await User.findOne({ $or: [ { email: login }, { cpf: login } ] }).select('+password')
 
-                    if (!user) {
-                        return res.status(401).json({ error: "Autenticação necessária! Usuario não encontrado." })
-                    }
+                if (!user) {
+                    return res.status(401).json({ error: "Autenticação necessária! Usuario não encontrado." })
+                }
 
-                    if (!await bcrypt.compare(password, user.password)) {
-                        return res.status(400).json({ error: 'Autenticação necessária! Senha incorreta.' })
-                    }
-                    
-                    user.password = undefined
+                if (!await bcrypt.compare(password, user.password)) {
+                    return res.status(401).json({ error: 'Autenticação necessária! Senha incorreta.' })
+                }
 
-                    req.auth = { user }
-            
-                    next()
+                user.password = undefined
+
+                req.auth = { user }
+
+                next()
 
                 break
             default:
         }
-        
+
     } catch (err) {
         console.warn(err)
         return res.status(401).json({ error: 'Erro inesperado, não foi possivel autenticar usuario.' })
     }
-        
+
 }
