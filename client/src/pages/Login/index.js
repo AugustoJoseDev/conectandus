@@ -2,10 +2,12 @@ import React from 'react'
 import { Redirect } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthProvider'
 import RoundSubmit from './RoundSubmit'
+import PromptBox from '../../components/Form/PromptBox'
 import './style.css'
 
 function Login() {
-    const { signed,errored,error, signIn } = useAuth()
+    const { signed, errored, error, resetError, signIn } = useAuth()
+    // const [login,setLogin]
 
     function handleSignIn(e) {
         try {
@@ -19,6 +21,10 @@ function Login() {
         }
     }
 
+    function handleKeyDown(e) {
+        resetError()
+    }
+
     if (signed)
         return (
             <Redirect to="/" />
@@ -28,17 +34,15 @@ function Login() {
         <div className="login">
             <p className="singin" align="center">Entrar</p>
 
-            {errored?(<h1>{error}</h1>):undefined}
-
-            <div className="prompt-box-wrapper"></div>
+            { errored ? (<PromptBox>{ error }</PromptBox>) : undefined }
 
             <form className="form" onSubmit={ handleSignIn }>
-                <input id="login" className="input" type="text" align="center" placeholder="E-Mail ou CPF" required />
-                <input id="password" className="input" type="password" align="center" placeholder="Senha" required />
-                {/* <input type="submit" align="center" value="Entrar" /> */ }
+                <input id="login" className="input" type="text" align="center" placeholder="E-Mail ou CPF" onKeyDown={ handleKeyDown } required />
+                <input id="password" className="input" type="password" align="center" placeholder="Senha" onKeyDown={ handleKeyDown } required />
                 <RoundSubmit value="Entrar" />
-                <p className="forgot" align="center"><a href="#">Esqueceu a senha?</a></p>
             </form>
+            <p className="forgot" align="center"><a href="#">Esqueceu a senha?</a></p>
+
         </div>
     )
 

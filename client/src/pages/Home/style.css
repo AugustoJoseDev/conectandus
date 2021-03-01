@@ -1,12 +1,11 @@
 
 .menu {
-    width: 60%;
-    top: 20%;
+    display: flex;
     height: fit-content;
-    margin: 7em auto;
+    align-items: center;
+    flex-direction: column;
 }
 .menu img {
     display: block;
     width: 350px;
-    margin: 0 auto;
 }
