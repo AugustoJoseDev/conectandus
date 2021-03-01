@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react'
 import api from '../services/api'
 import * as auth from '../services/auth'
 
-const AuthContext = createContext({ errored: false, error: "", signed: false, user: {}, signIn: ({ login, password }) => { }, signOut: () => { } })
+const AuthContext = createContext({ errored: false, error: "", signed: false, user: {}, resetError: () => { }, signIn: ({ login, password }) => { }, signOut: () => { } })
 
 export default function AuthProvider({ children }) {
     const [ user, setUser ] = useState(null)
@@ -25,9 +25,9 @@ export default function AuthProvider({ children }) {
     }, [])
 
     async function signIn({ login, password }) {
-        const { user, token, error:err } = await auth.signIn({ login, password })
+        const { user, token, error: err } = await auth.signIn({ login, password })
 
-        if(err){
+        if (err) {
             setError(err)
             return
         }
@@ -47,8 +47,12 @@ export default function AuthProvider({ children }) {
         setError(null)
     }
 
+    function resetError() {
+        setError(null)
+    }
+
     return (
-        <AuthContext.Provider value={ { errored: !!error, error, signed: !!user, user, signIn, signOut } }>
+        <AuthContext.Provider value={ { errored: !!error, error, resetError, signed: !!user, user, signIn, signOut } }>
             {children }
         </AuthContext.Provider>
     )
