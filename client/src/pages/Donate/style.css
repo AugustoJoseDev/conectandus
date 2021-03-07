@@ -1,0 +1,17 @@
+.donate{
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    flex-wrap:wrap;
+    flex-direction: column;
+    
+    width: 50vw;
+    height: fit-content;
+
+    margin-top: 100px;
+    /* margin-bottom: 100px; */
+
+}

@@ -2,8 +2,8 @@ import React from 'react'
 
 import './style.css'
 
-const App = ({ children, ...props }) => (
+const PromptBox = ({ children, ...props }) => (
     <p className="prompt-box" { ...props }>{ children }</p>
 )
 
-export default App
+export default PromptBox

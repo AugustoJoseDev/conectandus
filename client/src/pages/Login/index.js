@@ -1,22 +1,21 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom'
+import {Form} from '@unform/web'
 import { useAuth } from '../../contexts/AuthProvider'
-import RoundSubmit from './RoundSubmit'
+import Submit from '../../components/Form/Submit'
 import PromptBox from '../../components/Form/PromptBox'
+
 import './style.css'
+import Input from '../../components/Form/Input'
 
 function Login() {
     const { signed, errored, error, resetError, signIn } = useAuth()
 
-    function handleSignIn(e) {
+    function handleSignIn(data) {
         try {
-            e.preventDefault()
-
-            const login = document.querySelector("#login").value
-            const password = document.querySelector("#password").value
-            signIn({ login, password })
-
+            signIn(data)
         } catch (error) {
+            console.error(error);
         }
     }
 
@@ -35,11 +34,11 @@ function Login() {
 
             { errored ? (<PromptBox>{ error }</PromptBox>) : undefined }
 
-            <form className="form" onSubmit={ handleSignIn }>
-                <input id="login" className="input" type="text" align="center" placeholder="E-Mail ou CPF" onKeyDown={ handleKeyDown } required />
-                <input id="password" className="input" type="password" align="center" placeholder="Senha" onKeyDown={ handleKeyDown } required />
-                <RoundSubmit value="Entrar" />
-            </form>
+            <Form className="form" onSubmit={ handleSignIn }>
+                <Input name="login" type="text" placeholder="E-Mail ou CPF" onKeyDown={ handleKeyDown } required />
+                <Input name="password" type="password" placeholder="Senha" onKeyDown={ handleKeyDown } required />
+                <Submit value="Entrar" />
+            </Form>
             <p className="forgot" align="center"><a href="#">Esqueceu a senha?</a></p>
 
         </div>

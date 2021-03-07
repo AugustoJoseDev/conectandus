@@ -1,17 +1,21 @@
 import React from 'react'
-import RoundButton from '../../components/Form/RoundButton'
-import { useAuth } from '../../contexts/AuthProvider'
+import AnchorButton from '../../components/Form/AnchorButton'
+import Footer from '../../components/Footer'
 
 import './style.css'
 
 function Home() {
 
     return (
-        <div className="menu">
-            <RoundButton href="#">DOAR</RoundButton>
-            <img src="/resources/pc-icon.png" alt="icone pc" />
-            <RoundButton href="#">RECEBER</RoundButton>
-        </div>
+        <>
+            <div className="menu">
+                <AnchorButton to="/donate">DOAR</AnchorButton>
+                <img src="/resources/pc-icon.png" alt="icone pc" />
+                <AnchorButton to="/request">RECEBER</AnchorButton>
+            </div>
+
+            <Footer />
+        </>
     )
 }
 
