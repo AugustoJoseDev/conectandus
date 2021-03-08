@@ -1,53 +1,49 @@
-import React from 'react'
-import { Redirect } from 'react-router-dom'
-import {Form} from '@unform/web'
-import { useAuth } from '../../contexts/AuthProvider'
+import React, { useRef } from 'react'
+import { Form } from '@unform/web'
 import Submit from '../../components/Form/Submit'
-import PromptBox from '../../components/Form/PromptBox'
 
 import './style.css'
-import Input from '../../components/Form/Input'
 import TextArea from '../../components/Form/TextArea'
 import CheckBox from '../../components/Form/CheckBox'
+import api from '../../services/api'
+import { Redirect } from 'react-router'
 
 function Request() {
-    // const { signed, errored, error, resetError, signIn } = useAuth()
 
-    // function handleSignIn(data) {
-    //     try {
-    //         signIn(data)
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // }
+    function handleSubmit(data, { reset }) {
+        try {
 
-    // function handleKeyDown(e) {
-    //     resetError()
-    // }
+            data.equipment = data.equipment.join(', ')
 
-    // if (signed)
-    //     return (
-    //         <Redirect to="/" />
-    //     )
+            api.post('/requests', data)
+
+            reset()
+
+        } catch (error) {
+
+        }
+    }
 
     return (
         <div className="request">
             <h1>Você escolheu Receber Doação!</h1>
             <h2>Agora só falta um pouquinho</h2>
 
-            <Form>
+            <Form onSubmit={ handleSubmit }>
                 <p><label for="descriprionId">Descrição do equipamento</label></p>
-                <TextArea id="descriprionId" name="description" placeholder="Descreva brevemente as características nescessárias do aparelho." ></TextArea>
-                
+                <TextArea required id="descriprionId" name="description" placeholder="Descreva brevemente as características nescessárias do aparelho." ></TextArea>
+
                 <p><label>Informe o dispositivo que deseja, selecione de um até três, apenas o primeiro dos assinalados que for disponibilizado será entregue:</label></p>
-                
-                <CheckBox name="equipament" value="computador" label="Computador"/>
-                <CheckBox name="equipament" value="notebook" label="Notebook"/>
-                <CheckBox name="equipament" value="smartphone" label="Smartphone"/>
+
+                <CheckBox name="equipment" options={ [
+                    { id: 'desktop', value: 'desktop', label: 'Computador' },
+                    { id: 'notebook', value: 'notebook', label: 'Notebook' },
+                    { id: 'smartphone', value: 'smartphone', label: 'Celular' }
+                ] } />
+
+                <Submit value="Receba!" />
 
             </Form>
-
-            <Submit value="Receba!"/>
         </div>
     )
 

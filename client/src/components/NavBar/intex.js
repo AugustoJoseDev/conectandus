@@ -1,8 +1,17 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
+import { useAuth } from '../../contexts/AuthProvider'
 
 import './style.css'
 
-const NavBar = ({ children, ...props }) => {
+const NavBar = ({ ...props }) => {
+
+    const { signed, signOut } = useAuth()
+
+    function handleSignOut() {
+        signOut()
+    }
+
 
     function expand() {
         const nav = document.querySelector('.navbar')
@@ -15,7 +24,21 @@ const NavBar = ({ children, ...props }) => {
 
     return (
         <div className="navbar" { ...props }>
-            {children }
+            <div className="left">
+
+                <Link to="/">Inicio</Link>
+                <Link to="/donate">Doar</Link>
+                <Link to="/request">Receber</Link>
+
+            </div>
+            <div className="right">
+
+                { !signed ? (
+                    <Link to="/login">Login</Link>) :
+                    <a href="javascript:void(0);" onClick={ handleSignOut }>Logout</a>
+                }
+
+            </div>
             <a href="javascript:void(0);" className="icon" onClick={ expand }>
                 <i className="fa fa-bars"></i>
             </a>

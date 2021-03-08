@@ -43,11 +43,11 @@ module.exports = async (req, res, next) => {
 
                 const { token } = authorization
 
-                jwt.verify(token, authConfig.secret, async (err, { _id }) => {
+                jwt.verify(token, authConfig.secret, async (err, encoded) => {
 
                     if (err) return res.status(401).json({ error: "Autenticação necessária!" })
 
-                    const user = await User.findOne({ _id })
+                    const user = await User.findOne({ _id: encoded._id })
 
                     if (!user) {
                         return res.status(401).json({ error: "Usuario não encontrado." })
