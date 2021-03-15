@@ -1,0 +1,14 @@
+
+.helpus-wrapper {
+    width: 75%;
+    display: flex;
+    height: fit-content;
+    align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+.helpus-wrapper img {
+    display: block;
+    width: 350px;
+}

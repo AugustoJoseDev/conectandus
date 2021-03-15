@@ -10,8 +10,8 @@ function Donate() {
             <h1>Você escolheu Doar!</h1>
             <h2>Como gostaria de ajudar?</h2>
 
-            <AnchorButton to="#">EQUIPAMENTO</AnchorButton>
-            <AnchorButton to="#">APOIAR</AnchorButton>
+            <AnchorButton to="/order">EQUIPAMENTO</AnchorButton>
+            <AnchorButton to="/helpus">APOIAR</AnchorButton>
         </div>
     )
 }

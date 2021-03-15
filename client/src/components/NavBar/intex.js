@@ -27,8 +27,9 @@ const NavBar = ({ ...props }) => {
             <div className="left">
 
                 <Link to="/">Inicio</Link>
-                <Link to="/donate">Doar</Link>
+                <Link to="/order">Doar</Link>
                 <Link to="/request">Receber</Link>
+                <Link to="/helpus">Apoiar</Link>
 
             </div>
             <div className="right">
