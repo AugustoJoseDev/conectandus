@@ -66,6 +66,8 @@ router.post('/authenticate',authMiddleware, async (req, res) => {
 
         const token = login(user._id)
 
+        if(req.auth.superuser) user.superuser = true
+
         return res.status(200).json({ user, token })
     } catch (err) {
         console.warn(err)

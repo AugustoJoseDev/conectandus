@@ -53,7 +53,7 @@ router.put('/:id', async (req, res) => {
         const { id } = req.params
         const data = req.body
 
-        if ( `${auth.user._id}` !== `${id}`) {
+        if ( `${auth.user._id}` !== `${id}` && !auth.superuser) {
             return res.status(403).json({ error: 'Acesso negado!' })
         }
 
@@ -96,7 +96,7 @@ router.delete('/:id', async (req, res) => {
         const {auth} = req
         const { id } = req.params
 
-        if (auth.user._id != id) {
+        if ( `${auth.user._id}` !== `${id}` && !auth.superuser) {
             return res.status(403).json({ error: 'Acesso negado!' })
         }
 

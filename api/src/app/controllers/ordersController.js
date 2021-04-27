@@ -25,6 +25,20 @@ router.post('/', async (req, res) => {
         delete data.createdAt
         delete data.updatedAt
 
+        if(data.equipments instanceof Array ){
+            for (const i in data.equipments) {
+                
+                let e = data.equipments[i]
+
+                if(typeof e === 'string')
+                    e = {equipmentType: e}
+                
+                e.equipmentType = await EquipmentList.findOne({equipmentType:e.equipmentType})
+
+                data.equipments[i] = e
+            }
+        }
+
         const order = new Order(data)
 
         order.user = user._id
@@ -48,7 +62,7 @@ router.post('/', async (req, res) => {
 //Endpoint: GET /orders
 router.get('/', async (req, res) => {
     try {
-        const orders = await Order.find().populate('user')
+        const orders = await Order.find().populate(['user', 'equipments.equipmentType'])
 
         return res.status(200).json({ orders })
     } catch (err) {
@@ -63,7 +77,7 @@ router.get('/:id', async (req, res) => {
     try {
         const { id } = req.params
 
-        const order = await Order.findOne({ _id: id }).populate('user')
+        const order = await Order.findOne({ _id: id }).populate(['user', 'equipments.equipmentType'])
 
         if (!order) {
             return res.status(404).json({ error: 'Ordem de doação não encontrada.' })
@@ -84,20 +98,33 @@ router.put('/:id', async (req, res) => {
         const {auth} = req
         const {id} = req.params
         const data = req.body
-
-        const order = await Order.findById(id).populate('user')
+        const order = await Order.findById(id).populate(['user', 'equipments.equipmentType'])
 
         if (!order) {
             return res.status(404).json({ error: 'Ordem de doação não encontrada.' })
         }
 
-        if (`${order.user._id}` !== `${auth.user._id}`) {
+        if (`${order.user._id}` !== `${auth.user._id}` && !auth.superuser) {
             return res.status(403).json({ error: 'Acesso negado!'})
         }
 
         delete data._id
         delete data.createdAt
         delete data.updatedAt
+
+        if(data.equipments instanceof Array ){
+            for (const i in data.equipments) {
+                
+                let e = data.equipments[i]
+
+                if(typeof e === 'string')
+                    e = {equipmentType: e}
+                
+                e.equipmentType = await EquipmentList.findOne({equipmentType:e.equipmentType})
+
+                data.equipments[i] = e
+            }
+        }
 
         order.set(data)
 
@@ -130,7 +157,7 @@ router.delete('/:id', async (req, res) => {
             return res.status(404).json({ error: 'Ordem de doação não encontrada.' })
         }
 
-        if (`${order.user._id}` !== `${auth.user._id}`) {
+        if (`${order.user._id}` !== `${auth.user._id}` && !auth.superuser) {
             return res.status(403).json({ error: 'Acesso negado!'})
         }
 

@@ -1,5 +1,6 @@
 const express = require('express')
 const authMiddleware = require('../middlewares/auth')
+const EquipmentList = require('../models/EquipmentList')
 
 const Request = require('../models/Request')
 
@@ -25,6 +26,20 @@ router.post('/', async (req, res) => {
         delete data.createdAt
         delete data.updatedAt
 
+        if(data.equipments instanceof Array ){
+            for (const i in data.equipments) {
+                
+                let e = data.equipments[i]
+
+                if(typeof e === 'string')
+                    e = {equipmentType: e}
+                
+                e.equipmentType = await EquipmentList.findOne({equipmentType:e.equipmentType})
+
+                data.equipments[i] = e
+            }
+        }
+
         const request = new Request(data)
 
         request.user = user._id
@@ -48,7 +63,7 @@ router.post('/', async (req, res) => {
 //Endpoint: GET /requests
 router.get('/', async (req, res) => {
     try {
-        const requests = await Request.find().populate('user')
+        const requests = await Request.find().populate(['user', 'equipments.equipmentType'])
 
         return res.status(200).json({ requests })
     } catch (err) {
@@ -63,7 +78,7 @@ router.get('/:id', async (req, res) => {
     try {
         const { id } = req.params
 
-        const request = await Request.findOne({ _id: id }).populate('user')
+        const request = await Request.findOne({ _id: id }).populate(['user', 'equipments.equipmentType'])
 
         if (!request) {
             return res.status(404).json({ error: 'Solicitação não encontrada.' })
@@ -85,19 +100,33 @@ router.put('/:id', async (req, res) => {
         const {id} = req.params
         const data = req.body
 
-        const request = await Request.findById(id).populate('user')
+        const request = await Request.findById(id).populate(['user', 'equipments.equipmentType'])
 
         if (!request) {
             return res.status(404).json({ error: 'Solicitação não encontrada.' })
         }
 
-        if (`${request.user._id}` !== `${auth.user._id}`) {
+        if (`${request.user._id}` !== `${auth.user._id}` && !auth.superuser) {
             return res.status(403).json({ error: 'Acesso negado!'})
         }
 
         delete data._id
         delete data.createdAt
         delete data.updatedAt
+
+        if(data.equipments instanceof Array ){
+            for (const i in data.equipments) {
+                
+                let e = data.equipments[i]
+
+                if(typeof e === 'string')
+                    e = {equipmentType: e}
+                
+                e.equipmentType = await EquipmentList.findOne({equipmentType:e.equipmentType})
+
+                data.equipments[i] = e
+            }
+        }
 
         request.set(data)
 
@@ -124,13 +153,13 @@ router.delete('/:id', async (req, res) => {
         const {auth} = req
         const {id} = req.params
 
-        const request = await Request.findById(id).populate('user')
+        const request = await Request.findById(id).populate(['user', 'equipments.equipmentType'])
 
         if (!request) {
             return res.status(404).json({ error: 'Solicitação não encontrada.' })
         }
 
-        if (`${request.user._id}` !== `${auth.user._id}`) {
+        if (`${request.user._id}` !== `${auth.user._id}` && !auth.superuser) {
             return res.status(403).json({ error: 'Acesso negado!'})
         }
 

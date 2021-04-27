@@ -53,7 +53,9 @@ module.exports = async (req, res, next) => {
                         return res.status(401).json({ error: "Usuario não encontrado." })
                     }
 
-                    req.auth = { user }
+                    let superuser = authConfig.superusers.includes(`${user._id}`)
+
+                    req.auth = { user, superuser}
 
                     next()
 
@@ -77,7 +79,9 @@ module.exports = async (req, res, next) => {
 
                 user.password = undefined
 
-                req.auth = { user }
+                let superuser = authConfig.superusers.includes(`${user._id}`)
+
+                req.auth = { user, superuser}
 
                 next()
 

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Form } from '@unform/web'
 import Submit from '../../components/Form/Submit'
 
@@ -10,10 +10,33 @@ import { Redirect } from 'react-router'
 
 function Request() {
 
+    const [equipments, setEquipments] = useState([])
+
+    useEffect( () => (
+        async ()=>{
+
+            if(equipments.length) return
+
+            const response = await api.get('/equipments')
+            
+            if(response.status < 200 || response.status >= 300){
+                return
+            }
+
+            setEquipments(
+                response.data.equipments.map(e => ({
+                    id: e._id,
+                    value: e.equipmentType,
+                    label: e.equipmentType
+                }))
+            )
+
+
+        })(),[equipments]
+    )
+
     function handleSubmit(data, { reset }) {
         try {
-
-            data.equipment = data.equipment.join(', ')
 
             api.post('/requests', data)
 
@@ -35,14 +58,9 @@ function Request() {
                 <p><label for="descriprionId">Descrição do equipamento</label></p>
                 <TextArea required id="descriprionId" name="description" placeholder="Descreva brevemente as características nescessárias do aparelho." ></TextArea>
 
-                <p><label>Informe o dispositivo que deseja, selecione de um até três, apenas o primeiro dos assinalados que for disponibilizado será entregue:</label></p>
+                <p><label>Informe o(s) tipo(s) de equipamento(s) que deseja doar:</label></p>
 
-                <CheckBox name="equipment" options={ [
-                    { id: 'desktop', value: 'desktop', label: 'Computador de mesa' },
-                    { id: 'laptop', value: 'notebook', label: 'Laptop' },
-                    { id: 'smartphone', value: 'smartphone', label: 'Celular' },
-                    { id: 'perifericals', value: 'perifericals', label: 'Periféricos (mouse, teclado, câmera, etc...)' }
-                ] } />
+                <CheckBox name="equipments" options={ equipments } />
 
                 <Submit value="Receba!" />
 

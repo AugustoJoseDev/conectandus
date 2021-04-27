@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Form } from '@unform/web'
 import Submit from '../../components/Form/Submit'
 
@@ -8,6 +8,31 @@ import CheckBox from '../../components/Form/CheckBox'
 import api from '../../services/api'
 
 function Order() {
+
+    const [equipments, setEquipments] = useState([])
+
+    useEffect( () => (
+        async ()=>{
+
+            if(equipments.length) return
+
+            const response = await api.get('/equipments')
+            
+            if(response.status < 200 || response.status >= 300){
+                return
+            }
+
+            setEquipments(
+                response.data.equipments.map(e => ({
+                    id: e._id,
+                    value: e.equipmentType,
+                    label: e.equipmentType
+                }))
+            )
+
+
+        })(),[equipments]
+    )
 
     function handleSubmit(data, { reset }) {
         try {
@@ -36,13 +61,7 @@ function Order() {
 
                 <p><label>Informe o(s) tipo(s) de equipamento(s) que deseja doar:</label></p>
 
-                <CheckBox name="equipment" options={ [
-                    { id: 'desktop', value: 'desktop', label: 'Computador de mesa' },
-                    { id: 'laptop', value: 'notebook', label: 'Laptop' },
-                    { id: 'smartphone', value: 'smartphone', label: 'Celular' },
-                    { id: 'perifericals', value: 'perifericals', label: 'Periféricos (mouse, teclado, câmera, etc...)' },
-                    { id: 'pieces', value: 'pieces', label: 'Peças (componentes internos)' }
-                ] } />
+                <CheckBox name="equipment" options={ equipments } />
 
                 <Submit value="Doar!" />
 

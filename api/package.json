@@ -7,17 +7,13 @@
     "Edson Junior <edson.junior4@estudante.ifms.edu.br>",
     "Jose Augusto Queiroz Comparotto Gomes <jose.augusto.comparotto@gmail.com>"
   ],
-  "scripts":{
-    "start":"node src/index.js"
-  },
-  "license": "proprietary",
-  "private": true,
   "scripts": {
     "start": "node src/index.js"
   },
+  "license": "proprietary",
+  "private": true,
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",

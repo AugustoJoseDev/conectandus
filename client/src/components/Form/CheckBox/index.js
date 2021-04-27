@@ -33,20 +33,20 @@ const CheckBox = ({ name, options, ...props }) => {
     return (
         <div>
             {options.map((option, index) => (
-                <label htmlFor={ option.id } key={ option.id } className="checkbox-container">
-                    {option.label }
-                    <input
-                        defaultChecked={ defaultValue.find((dv) => dv === option.id) }
-                        ref={ ref => {
-                            inputRefs.current[ index ] = ref
-                        } }
-                        value={ option.value }
-                        type="checkbox"
-                        id={ option.id }
-                        { ...props }
-                    />
-                    <span className="checkmark"></span>
-                </label>
+                    <label htmlFor={ option.id } key={ option.id } className="checkbox-container">
+                        {option.label }
+                        <input
+                            defaultChecked={ defaultValue.find((dv) => dv === option.id) }
+                            ref={ ref => {
+                                inputRefs.current[ index ] = ref
+                            } }
+                            value={ option.value }
+                            type="checkbox"
+                            id={ option.id }
+                            { ...props }
+                        />
+                        <span className="checkmark"></span>
+                    </label>
             )) }
         </div>
     )
