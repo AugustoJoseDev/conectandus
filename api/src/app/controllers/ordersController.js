@@ -2,6 +2,7 @@ const express = require('express')
 const authMiddleware = require('../middlewares/auth')
 
 const Order = require('../models/Order')
+const EquipmentList = require('../models/EquipmentList')
 
 const router = express.Router()
 

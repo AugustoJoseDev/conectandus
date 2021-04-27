@@ -37,8 +37,6 @@ function Order() {
     function handleSubmit(data, { reset }) {
         try {
 
-            data.equipment = data.equipment.join(', ')
-
             api.post('/orders', data)
 
             reset()
@@ -61,7 +59,7 @@ function Order() {
 
                 <p><label>Informe o(s) tipo(s) de equipamento(s) que deseja doar:</label></p>
 
-                <CheckBox name="equipment" options={ equipments } />
+                <CheckBox name="equipments" options={ equipments } />
 
                 <Submit value="Doar!" />
 
