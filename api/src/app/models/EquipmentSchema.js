@@ -8,7 +8,7 @@ const EquipmentSchema = new Schema({
         required: true
     },
     state: {
-        type: String
+        type: Boolean
     },
     createdAt: {
         type: Date,

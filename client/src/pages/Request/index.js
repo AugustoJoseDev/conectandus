@@ -17,19 +17,25 @@ function Request() {
 
             if(equipments.length) return
 
+            const storageEquipments = localStorage.getItem('equipments')
+
+            if(storageEquipments) setEquipments(JSON.parse(storageEquipments))
+
             const response = await api.get('/equipments')
             
             if(response.status < 200 || response.status >= 300){
                 return
             }
 
-            setEquipments(
-                response.data.equipments.map(e => ({
-                    id: e._id,
-                    value: e.equipmentType,
-                    label: e.equipmentType
-                }))
-            )
+            const e = response.data.equipments.map(e => ({
+                id: e._id,
+                value: e.equipmentType,
+                label: e.equipmentType
+            }))
+
+            localStorage.setItem('equipments', JSON.stringify(e))
+
+            setEquipments(e)
 
 
         })(),[equipments]

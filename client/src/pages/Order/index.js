@@ -16,28 +16,44 @@ function Order() {
 
             if(equipments.length) return
 
+            const storageEquipments = localStorage.getItem('equipments')
+
+            if(storageEquipments) setEquipments(JSON.parse(storageEquipments))
+
             const response = await api.get('/equipments')
             
             if(response.status < 200 || response.status >= 300){
+
+                setEquipments([])
+
                 return
             }
 
-            setEquipments(
-                response.data.equipments.map(e => ({
-                    id: e._id,
-                    value: e.equipmentType,
-                    label: e.equipmentType
-                }))
-            )
+            const e = response.data.equipments.map(e => ({
+                id: e._id,
+                value: e.equipmentType,
+                label: e.equipmentType
+            }))
 
+            localStorage.setItem('equipments', JSON.stringify(e))
+
+            setEquipments(e)
+            
 
         })(),[equipments]
     )
 
+
     function handleSubmit(data, { reset }) {
         try {
 
-            api.post('/orders', data)
+            api.post('/orders', {
+                description: data.description,
+                equipments: data.equipments.map(e => ({
+                    equipmentType: e,
+                    state: !data.states.includes(e)
+                }))
+            })
 
             reset()
 
@@ -59,7 +75,24 @@ function Order() {
 
                 <p><label>Informe o(s) tipo(s) de equipamento(s) que deseja doar:</label></p>
 
-                <CheckBox name="equipments" options={ equipments } />
+                <div className="checkbox-wrapper">
+
+                    <div className="left">
+                        <p>Equipamento:</p>
+                        <CheckBox name="equipments" options={ equipments } />
+                    </div>
+                    <div className="right">
+                        <p>Precisa de manutenção?</p>
+                        <CheckBox name="states" options={ equipments.map(({id, value}) => ({
+
+                        id: `${id}_state`,
+                        value,
+                        label: 'Sim'
+
+                        })) } />
+                    </div>
+
+                </div>
 
                 <Submit value="Doar!" />
 
