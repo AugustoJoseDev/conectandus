@@ -13,9 +13,22 @@ export default function AuthProvider({ children }) {
             const storageToken = localStorage.getItem('token')
             const storageUser = localStorage.getItem('user')
 
-            if (storageToken && storageUser) {
-                api.defaults.headers.Authorization = `Bearer ${ JSON.parse(storageToken) }`
+
+            if (storageToken && storageUser ) {
+                
                 setUser(JSON.parse(storageUser))
+
+                const { user, token, error: err } = await auth.authenticate({ token: JSON.parse(storageToken) })
+
+                if (err) {
+                    setError(err)
+                    return
+                }
+
+                localStorage.setItem('token', JSON.stringify(token))
+                localStorage.setItem('user', JSON.stringify(user))
+
+                setUser(user)
                 setError(null)
             }
         } catch (err) {
@@ -25,14 +38,13 @@ export default function AuthProvider({ children }) {
     }, [])
 
     async function signIn({ login, password }) {
-        const { user, token, error: err } = await auth.signIn({ login, password })
+        const { user, token, error: err } = await auth.authenticate({ login, password })
 
         if (err) {
             setError(err)
             return
         }
 
-        api.defaults.headers.Authorization = `Bearer ${ token }`
         localStorage.setItem('token', JSON.stringify(token))
         localStorage.setItem('user', JSON.stringify(user))
         setUser(user)

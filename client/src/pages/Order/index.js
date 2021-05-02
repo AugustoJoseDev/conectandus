@@ -54,7 +54,7 @@ function Order() {
             <h2>Agora só falta um pouquinho</h2>
 
             <Form onSubmit={ handleSubmit }>
-                <p><label for="descriprionId">Descrição do equipamento</label></p>
+                <p><label htmlFor="descriprionId">Descrição do equipamento</label></p>
                 <TextArea required id="descriprionId" name="description" placeholder="Descreva brevemente as características gerais do aparelho, tal como possíveis defeitos." ></TextArea>
 
                 <p><label>Informe o(s) tipo(s) de equipamento(s) que deseja doar:</label></p>
