@@ -41,10 +41,15 @@ function Request() {
         })(),[equipments]
     )
 
-    function handleSubmit(data, { reset }) {
+    async function handleSubmit(data, { reset }) {
         try {
 
-            api.post('/requests', data)
+            const response = await api.post('/requests', data)
+
+            if(response.status < 200 || response.status >= 300){
+                alert("Algo deu errado!\n"+ response.data.error)
+                return 
+            }
 
             reset()
 
@@ -64,7 +69,7 @@ function Request() {
                 <p><label for="descriprionId">Descrição do equipamento</label></p>
                 <TextArea required id="descriprionId" name="description" placeholder="Descreva brevemente as características nescessárias do aparelho." ></TextArea>
 
-                <p><label>Informe o(s) tipo(s) de equipamento(s) que deseja doar:</label></p>
+                <p><label>Informe o(s) tipo(s) de equipamento(s) que deseja solicitar:</label></p>
 
                 <CheckBox name="equipments" options={ equipments } />
 

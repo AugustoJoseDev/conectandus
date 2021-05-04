@@ -22,6 +22,7 @@ export default function AuthProvider({ children }) {
 
                 if (err) {
                     setError(err)
+                    setUser(null)
                     return
                 }
 
