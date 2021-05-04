@@ -63,6 +63,9 @@ router.post('/', async (req, res) => {
 //Endpoint: GET /requests
 router.get('/', async (req, res) => {
     try {
+
+        if(!req.auth.superuser) return res.status(403).json({ error: 'Acesso negado' })
+
         const requests = await Request.find().populate(['user', 'equipments.equipmentType'])
 
         return res.status(200).json({ requests })
@@ -76,12 +79,18 @@ router.get('/', async (req, res) => {
 //Endpoint: GET /requests/{id}
 router.get('/:id', async (req, res) => {
     try {
+
+        const {auth} = req
         const { id } = req.params
 
         const request = await Request.findOne({ _id: id }).populate(['user', 'equipments.equipmentType'])
 
         if (!request) {
             return res.status(404).json({ error: 'Solicitação não encontrada.' })
+        }
+
+        if (`${request.user._id}` !== `${auth.user._id}` && !auth.superuser) {
+            return res.status(403).json({ error: 'Acesso negado!'})
         }
 
         return res.status(200).json({ request })

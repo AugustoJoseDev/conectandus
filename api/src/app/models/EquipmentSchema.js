@@ -7,7 +7,7 @@ const EquipmentSchema = new Schema({
         ref: 'equipment-list',
         required: true
     },
-    state: {
+    repairNeed: {
         type: Boolean
     },
     createdAt: {

@@ -63,6 +63,9 @@ router.post('/', async (req, res) => {
 //Endpoint: GET /orders
 router.get('/', async (req, res) => {
     try {
+
+        if(!req.auth.superuser) return res.status(403).json({ error: 'Acesso negado' })
+
         const orders = await Order.find().populate(['user', 'equipments.equipmentType'])
 
         return res.status(200).json({ orders })
@@ -76,12 +79,18 @@ router.get('/', async (req, res) => {
 //Endpoint: GET /orders/{id}
 router.get('/:id', async (req, res) => {
     try {
+        const {auth} = req
+
         const { id } = req.params
 
         const order = await Order.findOne({ _id: id }).populate(['user', 'equipments.equipmentType'])
 
         if (!order) {
             return res.status(404).json({ error: 'Ordem de doação não encontrada.' })
+        }
+
+        if (`${order.user._id}` !== `${auth.user._id}` && !auth.superuser) {
+            return res.status(403).json({ error: 'Acesso negado!'})
         }
 
         return res.status(200).json({ order })
