@@ -15,6 +15,7 @@ const ProtectedRoute = ({ component: Component, ...props }) => {
                 {signed ? <Component /> : <Login /> }
             </Common>
         ) } { ...props } />
+        
     )
 }
 
