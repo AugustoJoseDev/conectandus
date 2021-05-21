@@ -49,11 +49,11 @@ router.get('/:id', async (req, res) => {
 //Endpoint: PUT /users/{id}
 router.put('/:id', async (req, res) => {
     try {
-        const {auth} = req
+        const { auth } = req
         const { id } = req.params
         const data = req.body
 
-        if ( `${auth.user._id}` !== `${id}` && !auth.superuser) {
+        if (`${ auth.user._id }` !== `${ id }` && !auth.superuser) {
             return res.status(403).json({ error: 'Acesso negado!' })
         }
 
@@ -93,10 +93,10 @@ router.put('/:id', async (req, res) => {
 //Endpoint: DELETE /users/{id}
 router.delete('/:id', async (req, res) => {
     try {
-        const {auth} = req
+        const { auth } = req
         const { id } = req.params
 
-        if ( `${auth.user._id}` !== `${id}` && !auth.superuser) {
+        if (`${ auth.user._id }` !== `${ id }` && !auth.superuser) {
             return res.status(403).json({ error: 'Acesso negado!' })
         }
 
