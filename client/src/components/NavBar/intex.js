@@ -6,7 +6,7 @@ import './style.css'
 
 const NavBar = ({ ...props }) => {
 
-    const { signed, signOut } = useAuth()
+    const { user, signed, signOut } = useAuth()
 
     function handleSignOut() {
         signOut()
@@ -22,6 +22,8 @@ const NavBar = ({ ...props }) => {
         }
     }
 
+    console.log(user)
+
     return (
         <div className="navbar" { ...props }>
             <div className="left">
@@ -35,8 +37,21 @@ const NavBar = ({ ...props }) => {
             <div className="right">
 
                 { !signed ? (
-                    <Link to="/login">Login</Link>) :
-                    <a href="javascript:void(0);" onClick={ handleSignOut }>Logout</a>
+                    <Link to="/login">Login</Link>) : (
+
+                    <div className="dropdown">
+                        <button className="dropbtn">{ user.fullname.split(" ")[ 0 ] }
+                            &nbsp;<i className="fa fa-caret-down"></i>
+                        </button>
+                        <div className="dropdown-content">
+                            { user.superuser ? (
+                                <Link to="/admin/repair">Manutenção</Link>
+                            ) : null }
+                            <a href="javascript:void(0);" onClick={ handleSignOut }>Logout</a>
+                        </div>
+                    </div>
+
+                )
                 }
 
             </div>

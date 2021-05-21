@@ -8,7 +8,7 @@ import HelpUs from '../pages/HelpUs'
 import PageRoute from './PageRoute'
 import ProtectedRoute from './ProtectedRoute'
 import Request from '../pages/Request'
-import Dashboard from '../pages/Admin/Dashboard'
+import Repair from '../pages/Admin/Repair'
 
 const Routes = () => (
     <BrowserRouter>
@@ -19,7 +19,7 @@ const Routes = () => (
             <PageRoute exact path="/donate" component={ () => <Donate /> } />
             <ProtectedRoute exact path="/request" component={ () => <Request /> } />
             <ProtectedRoute exact path="/order" component={ () => <Order /> } />
-            <ProtectedRoute exact path="/admin" component={ () => <Dashboard /> } />
+            <ProtectedRoute exact path="/admin/repair" component={ () => <Repair /> } />
         </Switch>
     </BrowserRouter>
 )

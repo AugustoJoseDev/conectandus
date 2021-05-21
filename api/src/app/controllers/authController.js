@@ -60,13 +60,13 @@ router.post('/register', async (req, res) => {
 
 //Rota para fazer login ou renovar seção e obter um token de acesso
 //Endpoint: POST /auth/authenticate
-router.post('/authenticate',authMiddleware, async (req, res) => {
+router.post('/authenticate', authMiddleware, async (req, res) => {
     try {
-        const { user } = req.auth
+        const { user, superuser } = req.auth
 
         const token = login(user._id)
 
-        if(req.auth.superuser) user.superuser = true
+        user.superuser = superuser
 
         return res.status(200).json({ user, token })
     } catch (err) {
@@ -129,16 +129,16 @@ router.post('/reset_password', async (req, res) => {
             return res.status(400).send({ error: 'Nenhum ticket foi fornecido.' })
         }
 
-        let decoded 
+        let decoded
         try {
-            decoded = jwt.verify(ticket,authConfig.secret,)
+            decoded = jwt.verify(ticket, authConfig.secret,)
         } catch (error) {
             return res.status(400).send({ error: 'O ticket fornecido não é válido.' })
         }
 
-        const {email, resetPasswordToken } = decoded
+        const { email, resetPasswordToken } = decoded
 
-        const user = await User.findOne({email}).select('+resetPasswordToken')
+        const user = await User.findOne({ email }).select('+resetPasswordToken')
 
         if (!user) {
             return res.status(404).json({ error: 'Usuario não encontrado.' })
