@@ -44,9 +44,10 @@ const NavBar = ({ ...props }) => {
                             &nbsp;<i className="fa fa-caret-down"></i>
                         </button>
                         <div className="dropdown-content">
-                            { user.superuser ? (
+                            { user.superuser ? (<>
                                 <Link to="/admin/repair">Manutenção</Link>
-                            ) : null }
+                                <Link to="/admin/matches">Combinações</Link>
+                            </>) : null }
                             <a href="javascript:void(0);" onClick={ handleSignOut }>Logout</a>
                         </div>
                     </div>

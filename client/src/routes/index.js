@@ -9,6 +9,7 @@ import PageRoute from './PageRoute'
 import ProtectedRoute from './ProtectedRoute'
 import Request from '../pages/Request'
 import Repair from '../pages/Admin/Repair'
+import Matches from '../pages/Admin/Matches'
 
 const Routes = () => (
     <BrowserRouter>
@@ -20,6 +21,7 @@ const Routes = () => (
             <ProtectedRoute exact path="/request" component={ () => <Request /> } />
             <ProtectedRoute exact path="/order" component={ () => <Order /> } />
             <ProtectedRoute exact path="/admin/repair" component={ () => <Repair /> } />
+            <ProtectedRoute exact path="/admin/matches" component={ () => <Matches /> } />
         </Switch>
     </BrowserRouter>
 )

@@ -1,0 +1,47 @@
+
+table {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table td,
+table th {
+    border: 1px solid #ddd !important;
+    padding: 8px;
+    height: 36px;
+    color: black;
+}
+
+table tr {
+    background-color: #fff !important;
+}
+
+table tr:nth-child(even) {
+    background-color: #f2f2f2 !important;
+}
+
+table tr:hover {
+    background-color: #ddd !important;
+}
+
+table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #0a43bd !important;
+    color: white !important;
+}
+
+.main-dashboard {
+    position: absolute;
+    width: 90%;
+    top: 10%;
+}
+/* 
+.donation {
+    color: rgb(12, 78, 0);
+}
+.request {
+    color: rgb(204, 145, 19);
+} */
