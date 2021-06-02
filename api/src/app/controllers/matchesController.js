@@ -16,7 +16,7 @@ const router = express.Router()
 
 
 //Rota para obter a lista de combinações entre doações e solicitações
-//Endpoint: GET /matching
+//Endpoint: GET /matches
 router.get('/', async (req, res) => {
     try {
 
@@ -68,21 +68,7 @@ router.get('/', async (req, res) => {
         })
 
         return res.status(200).json({
-            matches:
-                matches.map(({ equipmentType, requestEquipment, orderEquipment }) => {
-
-                    return {
-
-                        equipmentType: equipmentType.equipmentType,
-                        requestDescription: requestEquipment.request.description,
-                        orderDescription: orderEquipment.order.description,
-                        requestUser: requestEquipment.request.user.fullname,
-                        orderUser: orderEquipment.order.user.fullname,
-                        requestCreatedAt: requestEquipment.createdAt,
-                        orderCreatedAt: orderEquipment.createdAt
-                    }
-
-                })
+            matches
         })
 
     } catch (err) {
