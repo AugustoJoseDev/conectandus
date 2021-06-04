@@ -7,22 +7,22 @@ import TextArea from '../../components/Form/TextArea'
 import CheckBox from '../../components/Form/CheckBox'
 import api from '../../services/api'
 
-function Order() {
+function Offer() {
 
-    const [equipments, setEquipments] = useState([])
+    const [ equipments, setEquipments ] = useState([])
 
-    useEffect( () => (
-        async ()=>{
+    useEffect(() => (
+        async () => {
 
-            if(equipments.length) return
+            if (equipments.length) return
 
             const storageEquipments = localStorage.getItem('equipments')
 
-            if(storageEquipments) setEquipments(JSON.parse(storageEquipments))
+            if (storageEquipments) setEquipments(JSON.parse(storageEquipments))
 
             const response = await api.get('/equipments')
-            
-            if(response.status < 200 || response.status >= 300){
+
+            if (response.status < 200 || response.status >= 300) {
 
                 setEquipments([])
 
@@ -38,16 +38,16 @@ function Order() {
             localStorage.setItem('equipments', JSON.stringify(e))
 
             setEquipments(e)
-            
 
-        })(),[equipments]
+
+        })(), [ equipments ]
     )
 
 
     async function handleSubmit(data, { reset }) {
         try {
 
-            const response = await api.post('/orders', {
+            const response = await api.post('/offers', {
                 description: data.description,
                 equipments: data.equipments.map(e => ({
                     equipmentType: e,
@@ -55,15 +55,15 @@ function Order() {
                 }))
             })
 
-            if(response.status < 200 || response.status >= 300){
-                alert("Algo deu errado!\n"+ response.data.error)
-                return 
+            if (response.status < 200 || response.status >= 300) {
+                alert("Algo deu errado!\n" + response.data.error)
+                return
             }
-           
+
 
             reset()
 
-            alert("Intenção de doação enviada!")
+            alert("oferta de doação enviada!")
 
         } catch (error) {
 
@@ -89,11 +89,11 @@ function Order() {
                     </div>
                     <div className="right">
                         <p>Precisa de manutenção?</p>
-                        <CheckBox name="repairNeeds" options={ equipments.map(({id, value}) => ({
+                        <CheckBox name="repairNeeds" options={ equipments.map(({ id, value }) => ({
 
-                        id: `${id}_repairNeed`,
-                        value,
-                        label: 'Sim'
+                            id: `${ id }_repairNeed`,
+                            value,
+                            label: 'Sim'
 
                         })) } />
                     </div>
@@ -108,4 +108,4 @@ function Order() {
 
 }
 
-export default Order
+export default Offer

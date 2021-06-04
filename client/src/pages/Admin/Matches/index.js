@@ -24,19 +24,19 @@ function Matches() {
 
             const dados = response.data.matches.map((match) => {
 
-                const { request, requestEquipment, order, orderEquipment, status } = match
+                const { request, requestEquipment, offer, offerEquipment, status } = match
 
                 console.log(match)
 
                 return [ match, [
 
-                    orderEquipment.equipmentType.equipmentType,
+                    offerEquipment.equipmentType.equipmentType,
                     request.description,
-                    order.description,
+                    offer.description,
                     request.user.fullname,
-                    order.user.fullname,
+                    offer.user.fullname,
                     requestEquipment.createdAt,
-                    orderEquipment.createdAt,
+                    offerEquipment.createdAt,
                     status
                 ] ]
 
@@ -54,9 +54,9 @@ function Matches() {
 
         const response = await api.post(`/matches`, {
             request: match.request._id,
-            order: match.order._id,
+            offer: match.offer._id,
             requestEquipment: match.requestEquipment._id,
-            orderEquipment: match.orderEquipment._id,
+            offerEquipment: match.offerEquipment._id,
         })
 
         if (response.status < 200 || response.status >= 300) {
@@ -86,11 +86,11 @@ function Matches() {
                 <thead>
                     <th>Tipo de equipamento</th>
                     <th>Descrição do pedido</th>
-                    <th>Descrição da intenção</th>
+                    <th>Descrição da oferta</th>
                     <th>Solicitante</th>
                     <th>Doador</th>
                     <th>Data Hora do pedido</th>
-                    <th>Data Hora da intenção</th>
+                    <th>Data Hora da oferta</th>
                     <th>Status</th>
                     <th>Alterar status</th>
                 </thead>

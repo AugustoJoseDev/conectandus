@@ -8,16 +8,16 @@ const MatchSchema = new Schema({
         ref: 'request',
         required: true
     },
-    order: {
+    offer: {
         type: SchemaTypes.ObjectId,
-        ref: 'order',
+        ref: 'offer',
         required: true
     },
     requestEquipment: {
         type: EquipmentSchema,
         required: true
     },
-    orderEquipment: {
+    offerEquipment: {
         type: EquipmentSchema,
         required: true
     },

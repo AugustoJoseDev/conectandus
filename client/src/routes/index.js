@@ -3,7 +3,7 @@ import { BrowserRouter, Switch } from 'react-router-dom'
 import Donate from '../pages/Donate'
 import Home from '../pages/Home'
 import Login from '../pages/Login'
-import Order from '../pages/Order'
+import Offer from '../pages/Offer'
 import HelpUs from '../pages/HelpUs'
 import PageRoute from './PageRoute'
 import ProtectedRoute from './ProtectedRoute'
@@ -19,7 +19,7 @@ const Routes = () => (
             <PageRoute exact path="/helpus" component={ () => <HelpUs /> } />
             <PageRoute exact path="/donate" component={ () => <Donate /> } />
             <ProtectedRoute exact path="/request" component={ () => <Request /> } />
-            <ProtectedRoute exact path="/order" component={ () => <Order /> } />
+            <ProtectedRoute exact path="/offer" component={ () => <Offer /> } />
             <ProtectedRoute exact path="/admin/repair" component={ () => <Repair /> } />
             <ProtectedRoute exact path="/admin/matches" component={ () => <Matches /> } />
         </Switch>

@@ -1,7 +1,7 @@
 const express = require('express')
 const authMiddleware = require('../middlewares/auth')
 
-const Order = require('../models/Order')
+const Offer = require('../models/Offer')
 const EquipmentList = require('../models/EquipmentList')
 
 const router = express.Router()
@@ -19,11 +19,11 @@ router.use(authMiddleware)
 // ############################## ARRUMAR ##############################
 
 // //Rota para adicionar uma ordem de doação de equipamento
-// //Endpoint: POST /orders/{orderId}/equipments
-// router.post('/:orderid/equipments/', async (req, res) => {
+// //Endpoint: POST /offers/{offerId}/equipments
+// router.post('/:offerid/equipments/', async (req, res) => {
 //     try {
 //         const { user } = req.auth
-//         const { orderId } = req.params
+//         const { offerId } = req.params
 //         const data = req.body
 
 //         delete data._id
@@ -32,19 +32,19 @@ router.use(authMiddleware)
 
 //         data.equipmentType = await EquipmentList.findOne({ equipmentType: data.equipmentType })
 
-//         const order = await Order.findOne({ _id: orderId }).populate([ 'user', 'equipments.equipmentType' ])
+//         const offer = await Offer.findOne({ _id: offerId }).populate([ 'user', 'equipments.equipmentType' ])
 
-//         order.equipments.push(data)
+//         offer.equipments.push(data)
 
 //         try {
-//             await order.validate()
+//             await offer.validate()
 //         } catch (err) {
 //             return res.status(400).json({ error: `${ err }` })
 //         }
 
-//         await order.save()
+//         await offer.save()
 
-//         return res.status(201).json({ order })
+//         return res.status(201).json({ offer })
 //     } catch (err) {
 //         console.warn(err)
 //         return res.status(400).json({ error: 'Erro inesperado' })
@@ -52,15 +52,15 @@ router.use(authMiddleware)
 // })
 
 // //Rota para obter os dados de todas as ordens de doações de equipamentos
-// //Endpoint: GET /orders
-// router.get('/:orderid/equipments/', async (req, res) => {
+// //Endpoint: GET /offers
+// router.get('/:offerid/equipments/', async (req, res) => {
 //     try {
 
 //         if (!req.auth.superuser) return res.status(403).json({ error: 'Acesso negado' })
 
-//         const orders = await Order.find().populate([ 'user', 'equipments.equipmentType' ])
+//         const offers = await Offer.find().populate([ 'user', 'equipments.equipmentType' ])
 
-//         return res.status(200).json({ orders })
+//         return res.status(200).json({ offers })
 //     } catch (err) {
 //         console.warn(err)
 //         return res.status(400).json({ error: 'Erro inesperado' })
@@ -68,24 +68,24 @@ router.use(authMiddleware)
 // })
 
 // //Rota para obter os dados de uma ordem de doação de equipamento dado um id
-// //Endpoint: GET /orders/{id}
-// router.get('/:orderid/equipments/:id', async (req, res) => {
+// //Endpoint: GET /offers/{id}
+// router.get('/:offerid/equipments/:id', async (req, res) => {
 //     try {
 //         const { auth } = req
 
 //         const { id } = req.params
 
-//         const order = await Order.findOne({ _id: id }).populate([ 'user', 'equipments.equipmentType' ])
+//         const offer = await Offer.findOne({ _id: id }).populate([ 'user', 'equipments.equipmentType' ])
 
-//         if (!order) {
+//         if (!offer) {
 //             return res.status(404).json({ error: 'Ordem de doação não encontrada.' })
 //         }
 
-//         if (`${ order.user._id }` !== `${ auth.user._id }` && !auth.superuser) {
+//         if (`${ offer.user._id }` !== `${ auth.user._id }` && !auth.superuser) {
 //             return res.status(403).json({ error: 'Acesso negado!' })
 //         }
 
-//         return res.status(200).json({ order })
+//         return res.status(200).json({ offer })
 //     } catch (err) {
 //         console.warn(err)
 //         return res.status(400).json({ error: 'Erro inesperado' })
@@ -95,21 +95,21 @@ router.use(authMiddleware)
 // ############################## ARRUMAR ##############################
 
 //Rota para alterar os dados de uma ordem de doação de equipamento dado um id
-//Endpoint: PUT /orders/{orderid}/equipments/{id}
-router.put('/:orderid/equipments/:id', async (req, res) => {
+//Endpoint: PUT /offers/{offerid}/equipments/{id}
+router.put('/:offerid/equipments/:id', async (req, res) => {
 
     try {
         const { auth } = req
-        const { orderid, id } = req.params
+        const { offerid, id } = req.params
         const data = req.body
 
-        const order = await Order.findOne({ _id: orderid }).populate([ 'user', 'equipments.equipmentType' ])
+        const offer = await Offer.findOne({ _id: offerid }).populate([ 'user', 'equipments.equipmentType' ])
 
-        if (!order) {
+        if (!offer) {
             return res.status(404).json({ error: 'Ordem de doação não encontrada.' })
         }
 
-        if (`${ order.user._id }` !== `${ auth.user._id }` && !auth.superuser) {
+        if (`${ offer.user._id }` !== `${ auth.user._id }` && !auth.superuser) {
             return res.status(403).json({ error: 'Acesso negado!' })
         }
 
@@ -120,17 +120,17 @@ router.put('/:orderid/equipments/:id', async (req, res) => {
         if (typeof data.equipmentType === 'string')
             data.equipmentType = await EquipmentList.findOne({ equipmentType: data.equipmentType })
 
-        const [ equipment ] = await order.equipments.filter(({ _id }) => _id == id)
+        const [ equipment ] = await offer.equipments.filter(({ _id }) => _id == id)
 
         Object.assign(equipment, { ...equipment, ...data })
 
         try {
-            await order.validate()
+            await offer.validate()
         } catch (err) {
             return res.status(400).json({ error: `${ err }` })
         }
 
-        await order.save()
+        await offer.save()
 
         return res.status(200).json({ equipment })
     } catch (err) {
@@ -140,30 +140,30 @@ router.put('/:orderid/equipments/:id', async (req, res) => {
 })
 
 // //Rota para deletar uma ordem de doação de equipamento dado um id
-// //Endpoint: DELETE /orders/{id}
-// router.delete('/:orderid/equipments/:id', async (req, res) => {
+// //Endpoint: DELETE /offers/{id}
+// router.delete('/:offerid/equipments/:id', async (req, res) => {
 
 //     try {
 //         const { auth } = req
 //         const { id } = req.params
 
-//         const order = await Order.findById(id).populate('user')
+//         const offer = await Offer.findById(id).populate('user')
 
-//         if (!order) {
+//         if (!offer) {
 //             return res.status(404).json({ error: 'Ordem de doação não encontrada.' })
 //         }
 
-//         if (`${ order.user._id }` !== `${ auth.user._id }` && !auth.superuser) {
+//         if (`${ offer.user._id }` !== `${ auth.user._id }` && !auth.superuser) {
 //             return res.status(403).json({ error: 'Acesso negado!' })
 //         }
 
-//         await order.deleteOne()
+//         await offer.deleteOne()
 
-//         return res.status(200).json({ order })
+//         return res.status(200).json({ offer })
 //     } catch (err) {
 //         console.warn(err)
 //         return res.status(400).json({ error: 'Erro inesperado' })
 //     }
 // })
 
-module.exports = app => app.use('/orders', router)
+module.exports = app => app.use('/offers', router)

@@ -1,7 +1,7 @@
 const express = require('express')
 const Request = require('../models/Request')
 const authMiddleware = require('../middlewares/auth')
-const Order = require('../models/Order')
+const Offer = require('../models/Offer')
 const EquipmentList = require('../models/EquipmentList')
 const Match = require('../models/Match')
 
@@ -30,12 +30,12 @@ router.get('/list', async (req, res) => {
         //Realiza as consultas
         const matches = await Match.find().populate([
             { path: 'request', populate: { path: 'user' } },
-            { path: 'order', populate: { path: 'user' } },
+            { path: 'offer', populate: { path: 'user' } },
             'requestEquipment.equipmentType',
-            'orderEquipment.equipmentType'
+            'offerEquipment.equipmentType'
         ])
         const requests = await Request.find().populate([ 'user', 'equipments.equipmentType' ])
-        const orders = await Order.find().populate([ 'user', 'equipments.equipmentType' ])
+        const offers = await Offer.find().populate([ 'user', 'equipments.equipmentType' ])
         const equipmentTypes = await EquipmentList.find()
 
         //Obtem a lista do equipamentos das solicitações
@@ -48,13 +48,13 @@ router.get('/list', async (req, res) => {
 
         }, [])
 
-        //Obtem a lista do equipamentos das intenções de doações
-        const ordersEquipments = orders.reduce((list, order) => {
+        //Obtem a lista do equipamentos das ofertas de doações
+        const offersEquipments = offers.reduce((list, offer) => {
 
-            return [ ...list, ...order.equipments
-                .filter(eq => matches.filter(m => `${ m.orderEquipment._id }` == `${ eq._id }`).length === 0)
+            return [ ...list, ...offer.equipments
+                .filter(eq => matches.filter(m => `${ m.offerEquipment._id }` == `${ eq._id }`).length === 0)
                 .filter(e => !e.repairNeed)
-                .map(e => ({ _id: e._id, equipmentType: e.equipmentType, repairNeed: e.repairNeed, createdAt: e.createdAt, order }))
+                .map(e => ({ _id: e._id, equipmentType: e.equipmentType, repairNeed: e.repairNeed, createdAt: e.createdAt, offer }))
             ]
 
         }, [])
@@ -62,7 +62,7 @@ router.get('/list', async (req, res) => {
 
         //Ordena os equipamentos por ordem de data (do mais antigo para o mais novo)
         requestEquipments.sort((a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt))
-        ordersEquipments.sort((a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt))
+        offersEquipments.sort((a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt))
 
 
         const potentialMatches = []
@@ -70,20 +70,20 @@ router.get('/list', async (req, res) => {
         equipmentTypes.forEach(equipmentType => {
 
             let requestEquipmentsFiltered = requestEquipments.filter(e => `${ e.equipmentType._id }` == `${ equipmentType._id }`)
-            let ordersEquipmentsFiltered = ordersEquipments.filter(e => `${ e.equipmentType._id }` == `${ equipmentType._id }`)
+            let offersEquipmentsFiltered = offersEquipments.filter(e => `${ e.equipmentType._id }` == `${ equipmentType._id }`)
 
-            while (requestEquipmentsFiltered.length > 0 && ordersEquipmentsFiltered.length > 0) {
+            while (requestEquipmentsFiltered.length > 0 && offersEquipmentsFiltered.length > 0) {
 
                 let match = {
 
                     equipmentType,
                     requestEquipment: requestEquipmentsFiltered.shift(),
-                    orderEquipment: ordersEquipmentsFiltered.shift(),
+                    offerEquipment: offersEquipmentsFiltered.shift(),
                     status: 'Em análise'
 
                 }
 
-                match.order = match.orderEquipment.order
+                match.offer = match.offerEquipment.offer
                 match.request = match.requestEquipment.request
 
                 potentialMatches.push(match)
@@ -113,10 +113,10 @@ router.post('/', async (req, res) => {
         delete data.createdAt
         delete data.updatedAt
 
-        const order = await Order.findOne({ _id: data.order }).populate([ 'user', 'equipments.equipmentType' ])
+        const offer = await Offer.findOne({ _id: data.offer }).populate([ 'user', 'equipments.equipmentType' ])
         const request = await Request.findOne({ _id: data.request }).populate([ 'user', 'equipments.equipmentType' ])
 
-        if (!order) {
+        if (!offer) {
             return res.status(404).json({ error: 'Ordem de doação não encontrada.' })
         }
 
@@ -125,15 +125,15 @@ router.post('/', async (req, res) => {
         }
 
 
-        const [ orderEquipment ] = order.equipments.filter(e => `${ e._id }` == `${ data.orderEquipment }`)
+        const [ offerEquipment ] = offer.equipments.filter(e => `${ e._id }` == `${ data.offerEquipment }`)
         const [ requestEquipment ] = request.equipments.filter(e => `${ e._id }` == `${ data.requestEquipment }`)
 
         const match = new Match()
 
         match.set({
-            order,
+            offer,
             request,
-            orderEquipment,
+            offerEquipment,
             requestEquipment,
             status: 'Aplicada'
         })

@@ -29,7 +29,7 @@ const NavBar = ({ ...props }) => {
             <div className="left">
 
                 <Link to="/">Inicio</Link>
-                <Link to="/order">Doar</Link>
+                <Link to="/offer">Doar</Link>
                 <Link to="/request">Solicitar</Link>
                 <Link to="/helpus">Apoiar</Link>
 

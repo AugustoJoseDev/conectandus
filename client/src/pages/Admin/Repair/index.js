@@ -16,13 +16,13 @@ function Repair() {
 
         (async () => {
 
-            const response = await api.get('/orders')
+            const response = await api.get('/offers')
 
             if (response.status < 200 || response.status >= 300) {
                 return
             }
 
-            const dados = response.data.orders
+            const dados = response.data.offers
 
             const newRows = []
 
@@ -40,7 +40,7 @@ function Repair() {
 
                         const row = [ equipment, description, user.fullname, user.email, ts ]
 
-                        newRows.push([ { order: each, equipment: e }, row ])
+                        newRows.push([ { offer: each, equipment: e }, row ])
 
                     }
                 })
@@ -55,10 +55,10 @@ function Repair() {
     }, [ rows, update ])
 
 
-    async function handleSolve({ order, equipment }) {
+    async function handleSolve({ offer, equipment }) {
 
 
-        const response = await api.put(`/orders/${ order._id }/equipments/${ equipment._id }`, {
+        const response = await api.put(`/offers/${ offer._id }/equipments/${ equipment._id }`, {
 
             repairNeed: false
 
@@ -84,12 +84,12 @@ function Repair() {
                     <th>Resolver</th>
                 </thead>
                 {
-                    rows ? rows.map(([ { order, equipment }, row ]) => (
+                    rows ? rows.map(([ { offer, equipment }, row ]) => (
                         <tr>
                             {row.map(col => <td>{ col }</td>) }
                             <td>
                                 <center>
-                                    <button onClick={ () => handleSolve({ order, equipment }) }>Resolver</button>
+                                    <button onClick={ () => handleSolve({ offer, equipment }) }>Resolver</button>
                                 </center>
                             </td>
                         </tr>
