@@ -6,24 +6,23 @@ import './style.css'
 import TextArea from '../../components/Form/TextArea'
 import CheckBox from '../../components/Form/CheckBox'
 import api from '../../services/api'
-import { Redirect } from 'react-router'
 
 function Request() {
 
-    const [equipments, setEquipments] = useState([])
+    const [ equipments, setEquipments ] = useState([])
 
-    useEffect( () => (
-        async ()=>{
+    useEffect(() => (
+        async () => {
 
-            if(equipments.length) return
+            if (equipments.length) return
 
             const storageEquipments = localStorage.getItem('equipments')
 
-            if(storageEquipments) setEquipments(JSON.parse(storageEquipments))
+            if (storageEquipments) setEquipments(JSON.parse(storageEquipments))
 
             const response = await api.get('/equipments')
-            
-            if(response.status < 200 || response.status >= 300){
+
+            if (response.status < 200 || response.status >= 300) {
                 return
             }
 
@@ -38,7 +37,7 @@ function Request() {
             setEquipments(e)
 
 
-        })(),[equipments]
+        })(), [ equipments ]
     )
 
     async function handleSubmit(data, { reset }) {
@@ -46,9 +45,9 @@ function Request() {
 
             const response = await api.post('/requests', data)
 
-            if(response.status < 200 || response.status >= 300){
-                alert("Algo deu errado!\n"+ response.data.error)
-                return 
+            if (response.status < 200 || response.status >= 300) {
+                alert("Algo deu errado!\n" + response.data.error)
+                return
             }
 
             reset()
@@ -62,7 +61,7 @@ function Request() {
 
     return (
         <div className="request">
-            <h1>Você escolheu Receber Doação!</h1>
+            <h1>Você escolheu solicitar uma doação!</h1>
             <h2>Agora só falta um pouquinho</h2>
 
             <Form onSubmit={ handleSubmit }>
@@ -73,7 +72,7 @@ function Request() {
 
                 <CheckBox name="equipments" options={ equipments } />
 
-                <Submit value="Receba!" />
+                <Submit value="Solicitar!" />
 
             </Form>
         </div>

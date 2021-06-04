@@ -11,7 +11,7 @@ function Home() {
             <div className="menu">
                 <AnchorButton to="/donate">DOAR</AnchorButton>
                 <img src="/resources/pc-icon.png" alt="icone pc" />
-                <AnchorButton to="/request">RECEBER</AnchorButton>
+                <AnchorButton to="/request">SOLICITAR</AnchorButton>
             </div>
 
             <Footer />

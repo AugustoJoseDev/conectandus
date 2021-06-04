@@ -30,7 +30,7 @@ const NavBar = ({ ...props }) => {
 
                 <Link to="/">Inicio</Link>
                 <Link to="/order">Doar</Link>
-                <Link to="/request">Receber</Link>
+                <Link to="/request">Solicitar</Link>
                 <Link to="/helpus">Apoiar</Link>
 
             </div>
@@ -46,9 +46,9 @@ const NavBar = ({ ...props }) => {
                         <div className="dropdown-content">
                             { user.superuser ? (<>
                                 <Link to="/admin/repair">Manutenção</Link>
-                                <Link to="/admin/matches">Combinações</Link>
+                                <Link to="/admin/matches">Doações</Link>
                             </>) : null }
-                            <a href="javascript:void(0);" onClick={ handleSignOut }>Logout</a>
+                            <a href="javascript:void(0);" onClick={ handleSignOut }>Sair</a>
                         </div>
                     </div>
 

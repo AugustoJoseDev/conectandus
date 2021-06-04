@@ -5,16 +5,18 @@ import './style.css'
 
 function Repair() {
 
-    const [ rows, setRows ] = useState([])
+    const [ rows, setRows ] = useState(null)
+    const [ update, setUpdate ] = useState(true)
 
-    useEffect(() => (
-        async () => {
 
-            if (rows.length) return
+
+    useEffect(() => {
+
+        if (rows !== null && !update) return
+
+        (async () => {
 
             const response = await api.get('/orders')
-
-            setRows([])
 
             if (response.status < 200 || response.status >= 300) {
                 return
@@ -47,8 +49,10 @@ function Repair() {
 
 
             setRows(newRows)
+            setUpdate(false)
 
-        })(), [ rows ])
+        })()
+    }, [ rows, update ])
 
 
     async function handleSolve({ order, equipment }) {
@@ -60,9 +64,11 @@ function Repair() {
 
         })
 
-        if (response.status >= 200 && response.status < 300) {
-            alert('O reparo do equipamento foi marcado como resolvido.')
+        if (response.status < 200 || response.status >= 300) {
+            alert('Não foi possivel alterar o status da doação.')
         }
+
+        setUpdate(true)
     }
 
 
@@ -78,7 +84,7 @@ function Repair() {
                     <th>Resolver</th>
                 </thead>
                 {
-                    rows.map(([ { order, equipment }, row ]) => (
+                    rows ? rows.map(([ { order, equipment }, row ]) => (
                         <tr>
                             {row.map(col => <td>{ col }</td>) }
                             <td>
@@ -87,7 +93,7 @@ function Repair() {
                                 </center>
                             </td>
                         </tr>
-                    ))
+                    )) : null
                 }
             </table>
         </div>

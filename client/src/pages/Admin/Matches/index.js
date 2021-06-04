@@ -5,58 +5,80 @@ import './style.css'
 
 function Matches() {
 
-    const [ rows, setRows ] = useState([])
+    const [ rows, setRows ] = useState(null)
+    const [ update, setUpdate ] = useState(true)
 
-    useEffect(() => (
-        async () => {
 
-            if (rows.length) return
+    useEffect(() => {
 
-            const response = await api.get('/matches')
+        if (!update && rows !== null) return
 
-            setRows([])
+        (async () => {
+            const response = await api.get('/matches/list')
 
             if (response.status < 200 || response.status >= 300) {
                 return
             }
 
+            console.log(response.data.matches)
+
             const dados = response.data.matches.map((match) => {
 
-                const { equipmentType, requestEquipment, orderEquipment } = match
+                const { request, requestEquipment, order, orderEquipment, status } = match
+
+                console.log(match)
 
                 return [ match, [
 
-                    equipmentType.equipmentType,
-                    requestEquipment.request.description,
-                    orderEquipment.order.description,
-                    requestEquipment.request.user.fullname,
-                    orderEquipment.order.user.fullname,
+                    orderEquipment.equipmentType.equipmentType,
+                    request.description,
+                    order.description,
+                    request.user.fullname,
+                    order.user.fullname,
                     requestEquipment.createdAt,
-                    orderEquipment.createdAt
+                    orderEquipment.createdAt,
+                    status
                 ] ]
 
             }).map(match => Object.values(match))
 
             setRows(dados)
+            setUpdate(false)
 
-        })(), [ rows ])
+        })()
+    }, [ rows, update ])
 
 
-    async function handleSolve({ match }) {
+    async function handleSelect({ match }) {
 
 
-        // const response = await api.put(`/orders/${ order._id }/equipments/${ equipment._id }`, {
+        const response = await api.post(`/matches`, {
+            request: match.request._id,
+            order: match.order._id,
+            requestEquipment: match.requestEquipment._id,
+            orderEquipment: match.orderEquipment._id,
+        })
 
-        //     repairNeed: false
+        if (response.status < 200 || response.status >= 300) {
+            alert('Não foi possivel alterar o status da doação.')
+        }
 
-        // })
-
-        // if (response.status >= 200 && response.status < 300) {
-        //     alert('O reparo do equipamento foi marcado como resolvido.')
-        // }
-
+        setUpdate(true)
     }
 
+    async function handleConfirm({ match }) {
+
+
+        const response = await api.put(`/matches/${ match._id }`, {
+            status: 'Efetuada'
+        })
+
+        if (response.status < 200 || response.status >= 300) {
+            alert('Não foi possivel alterar o status da doação.')
+        }
+
+        setUpdate(true)
+    }
 
     return (
         <div className="main-dashboard">
@@ -69,19 +91,34 @@ function Matches() {
                     <th>Doador</th>
                     <th>Data Hora do pedido</th>
                     <th>Data Hora da intenção</th>
-                    <th>Confirmar doação</th>
+                    <th>Status</th>
+                    <th>Alterar status</th>
                 </thead>
                 {
-                    rows.map(([ { match }, row ]) => (
+                    rows ? rows.map(([ match, row ]) => (
                         <tr>
                             {row.map(col => <td>{ col }</td>) }
                             <td>
                                 <center>
-                                    <button onClick={ () => handleSolve({ match }) }>Confirmar doação</button>
+                                    { (() => {
+                                        switch (match.status) {
+                                            case "Aplicada":
+
+                                                return <button onClick={ () => handleConfirm({ match }) }>Confirmar doação</button>
+
+                                            case "Em análise":
+
+                                                return <button onClick={ () => handleSelect({ match }) }>Aplicar doação</button>
+
+                                                break
+                                            default:
+                                                break
+                                        }
+                                    })() }
                                 </center>
                             </td>
                         </tr>
-                    ))
+                    )) : null
                 }
             </table>
         </div>

@@ -1,4 +1,5 @@
 const { Schema, SchemaTypes, model } = require('../../database')
+const EquipmentSchema = require('./EquipmentSchema')
 
 //Definição da estrutura da tabela de ordens de doações
 const MatchSchema = new Schema({
@@ -10,6 +11,14 @@ const MatchSchema = new Schema({
     order: {
         type: SchemaTypes.ObjectId,
         ref: 'order',
+        required: true
+    },
+    requestEquipment: {
+        type: EquipmentSchema,
+        required: true
+    },
+    orderEquipment: {
+        type: EquipmentSchema,
         required: true
     },
     status: {
@@ -24,11 +33,11 @@ const MatchSchema = new Schema({
     }
 }, { versionKey: false })
 
-OrderSchema.pre('save', async function (next) {
+MatchSchema.pre('save', async function (next) {
     this.updatedAt = new Date()
     next()
 })
 
-const Match = model('match', OrderSchema)
+const Match = model('match', MatchSchema)
 
 module.exports = Match
