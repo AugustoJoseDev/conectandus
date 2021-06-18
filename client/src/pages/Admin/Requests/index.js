@@ -22,7 +22,16 @@ function Requests() {
                 return
             }
 
+            const responseMatches = await api.get('/matches/list')
+
+            if (responseMatches.status < 200 || responseMatches.status >= 300) {
+                return
+            }
+
             const dados = response.data.requests
+            const dadosMatches = responseMatches.data.matches
+
+            console.log(dadosMatches)
 
             const newRows = []
 
@@ -36,7 +45,9 @@ function Requests() {
 
                     const equipment = e.equipmentType.equipmentType
 
-                    const row = [ equipment, description, user.fullname, user.email, new Date(ts).toLocaleString() ]
+                    const [ { status } = { status: 'Não atendida' } ] = dadosMatches.filter(match => `${ match.requestEquipment._id }` == `${ e._id }`)
+
+                    const row = [ equipment, description, user.fullname, user.email, new Date(ts).toLocaleString(), status ]
 
                     newRows.push([ { request: each, equipment: e }, row ])
 
@@ -60,6 +71,7 @@ function Requests() {
                     <th>Nome</th>
                     <th>E-Mail</th>
                     <th>Data e hora</th>
+                    <th>Situação</th>
                 </thead>
                 {
                     rows ? rows.map(([ { request, equipment }, row ]) => (
