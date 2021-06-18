@@ -46,6 +46,7 @@ const NavBar = ({ ...props }) => {
                         <div className="dropdown-content">
                             { user.superuser ? (<>
                                 <Link to="/admin/repair">Manutenção</Link>
+                                <Link to="/admin/requests">Solicitações</Link>
                                 <Link to="/admin/matches">Doações</Link>
                             </>) : null }
                             <a href="javascript:void(0);" onClick={ handleSignOut }>Sair</a>
